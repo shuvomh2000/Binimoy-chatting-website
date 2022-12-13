@@ -19,8 +19,20 @@ const Signup = () => {
     } else {
       setView(false);
     }
-    console.log(view);
   };
+
+  let handleEmail = (e)=>{
+    setEmail(e.target.value)
+    setEmailerr('')
+  }
+  let handleName = (e)=>{
+    setName(e.target.value)
+    setNameerr('')
+  }
+  let handlePassword = (e)=>{
+    setPassword(e.target.value)
+    setPassworderr('')
+  }
 
   let handleSubmit = () => {
     if (!email) {
@@ -47,7 +59,7 @@ const Signup = () => {
           // backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="w-[450px] pt-[60px] drop-shadow-2xl p-[50px] bg-white mx-auto rounded-md">
+        <div className="w-[450px] pt-[60px] drop-shadow-2xl p-[50px] bg-white mx-auto md:rounded-md">
           <div>
             <h2 className="text-center text-4xl font-bold text-heading font-nunito uppercase mb-[10px]">
               register
@@ -61,7 +73,7 @@ const Signup = () => {
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[30px]"
               type="email"
               placeholder="Email Adress"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmail}
             />
             {emailerr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
@@ -79,7 +91,7 @@ const Signup = () => {
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[30px]"
               type="text"
               placeholder="Full Name"
-              onChange={(e) => setName(e.target.value)}
+              onChange={handleName}
             />
             {nameerr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
@@ -97,7 +109,7 @@ const Signup = () => {
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px]  mb-[10px]"
                 type={view ? "password" : "text"}
                 placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handlePassword}
               />
               {passworderr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[5px] absolute left-0 bottom-[-19px] w-full">
@@ -117,7 +129,7 @@ const Signup = () => {
               </button>
             </div>
             <button
-              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize rounded-[50px] mt-[30px]"
+              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[30px]"
               onClick={handleSubmit}
             >
               sign up
