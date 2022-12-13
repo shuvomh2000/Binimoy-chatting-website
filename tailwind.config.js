@@ -11,6 +11,7 @@ module.exports = {
       colors: {
         'primary': '#5F34F5',
         'heading': '#11175D',
+        'red': '#ff0f0f',
         'yBorder': '#FFB800',
         'bl_opacity': 'rgba(0,0,0,.6)',
         'wh_opacity': 'rgba(255,255,255,.5)',
