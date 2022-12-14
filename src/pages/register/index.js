@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import LoginErr from "../components/alerts/LoginErr";
+import { FcGoogle } from "react-icons/fc";
 
-const Signup = () => {
+const Register = () => {
   let [email, setEmail] = useState("");
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
@@ -47,19 +47,19 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup">
+    <div className="registration">
       <div
         className="w-screen h-screen flex justify-items-center items-center"
         style={{
-          background: "#5F34F5",
-          // background: "#807DC8"
+          // background: "#5F34F5",
+          background: "#807DC8"
           // backgroundImage: 'url("images/signBG.png")',
           // backgroundPosition: "center",
           // backgroundSize: "cover",
           // backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="w-[450px] pt-[60px] drop-shadow-2xl p-[50px] bg-white mx-auto md:rounded-md">
+        <div className="w-[450px] pt-[60px] drop-shadow-2xl pt-[50px] px-[40px] pb-[30px] bg-white mx-auto md:rounded-md">
           <div>
             <h2 className="text-center text-4xl font-bold text-heading font-nunito uppercase mb-[10px]">
               register
@@ -70,7 +70,7 @@ const Signup = () => {
             <div className="relative">
             <input
               className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
-                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[30px]"
+                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
               type="email"
               placeholder="Email Adress"
               onChange={handleEmail}
@@ -88,7 +88,7 @@ const Signup = () => {
             <div className="relative">
             <input
               className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
-                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[30px]"
+                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
               type="text"
               placeholder="Full Name"
               onChange={handleName}
@@ -129,15 +129,24 @@ const Signup = () => {
               </button>
             </div>
             <button
-              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[30px]"
+              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[15px]"
               onClick={handleSubmit}
             >
               sign up
             </button>
-            <div className="text-center mt-[20px]">
+           <div className="text-center ">
+           <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]">
+           <FcGoogle/>
+           </button>
+           </div>
+            <div className="text-center mt-[5px]">
               <p className="text-center font-nunito text-heading text-sm font-normal">
                 Already have an account ?{" "}
-                <span className="text-[#EA6C00]">Sign In</span>
+                <span className="text-[#EA6C00] cursor-pointer ">
+                    <NavLink to='/login'>
+                    sign in
+                    </NavLink>
+                </span>
               </p>
             </div>
           </div>
@@ -147,4 +156,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Register;
