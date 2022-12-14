@@ -1,8 +1,17 @@
 import React from 'react'
+import {NavLink} from 'react-router-dom'
+
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div>
+      <button>
+        <NavLink to='/login'>
+        go to login
+        </NavLink>
+        </button>
+    </div>
+    
   )
 }
 
