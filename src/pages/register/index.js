@@ -37,9 +37,14 @@ const Register = () => {
   let handleSubmit = () => {
     if (!email) {
       setEmailerr("email Required");
+    }else if(!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)){
+      setEmailerr("Valid email Required");
     }
+
     if (!name) {
       setNameerr("name Required");
+    }else if(name.length <= 2){
+      setNameerr("name contain more than 2 charecter");
     }
     if (!password) {
       setPassworderr("password Required");

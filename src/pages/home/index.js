@@ -13,7 +13,7 @@ import UserList from '../../components/UserList'
 const Home = () => {
   return (
     <div className='flex justify-between p-2.5 xl:p-0'>
-      <div className='w-[14%]'>
+      <div className='xl:w-[14%]'>
         <Sidebar active="home"/>
       </div>
       <div className='xl:w-[84%] flex flex-wrap gap-x-5 gap-y-10'>
