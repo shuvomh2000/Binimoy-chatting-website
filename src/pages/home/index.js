@@ -12,34 +12,34 @@ import UserList from '../../components/UserList'
 
 const Home = () => {
   return (
-    <div className='flex justify-between'>
+    <div className='flex justify-between p-2.5 xl:p-0'>
       <div className='w-[14%]'>
         <Sidebar active="home"/>
       </div>
-      <div className='w-[84%] flex flex-wrap gap-x-5 gap-y-10'>
+      <div className='xl:w-[84%] flex flex-wrap gap-x-5 gap-y-10'>
         {/* search & friends */}
-        <div className='w-[425px]'>
+        <div className='w-full xl:w-[425px]'>
           <Search/>
           <Friends/>
         </div>
         {/* user list  */}
-        <div className='w-[334px]'>
+        <div className='w-full xl:w-[334px]'>
           <UserList/>
         </div>
         {/* friends request */}
-        <div className='w-[334px]'>
+        <div className='w-full xl:w-[334px]'>
           <FriendRequest/>
         </div>
         {/* my group list */}
-        <div className='w-[425px]'>
+        <div className='w-full xl:w-[425px]'>
           <Groups/>
         </div>
         {/* group list */}
-        <div className='w-[334px]'>
+        <div className='w-full xl:w-[334px]'>
           <GroupList/>
         </div>
         {/* blocked list */}
-        <div className='w-[334px]'>
+        <div className='w-full xl:w-[334px]'>
           <BlockedUser/>
         </div>
       </div>

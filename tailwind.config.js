@@ -13,7 +13,7 @@ module.exports = {
         'primary': '#5F34F5',
         'heading': '#11175D',
         'msg': 'rgba(77, 77, 77, 0.75)',
-        'bl_opacity': 'rgba(0,0,0,.6)',
+        'bl_opacity': 'rgba(0,0,0,.2)',
         'wh_opacity': 'rgba(255,255,255,.4)',
       },
       maxWidth: {
