@@ -4,6 +4,8 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
 import { TailSpin } from "react-loader-spinner";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
@@ -12,6 +14,8 @@ import { FcGoogle } from "react-icons/fc";
 const Register = () => {
   const auth = getAuth();
   const navigate = useNavigate()
+  const provider = new GoogleAuthProvider();
+
   let [email, setEmail] = useState("");
   let [name, setName] = useState("");
   let [password, setPassword] = useState("");
@@ -106,6 +110,30 @@ const Register = () => {
           setLoading(false);
         });
     }
+  };
+
+  let handleGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        setSuccess("login successfull");
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        setFerr(errorCode);
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   return (
@@ -231,7 +259,7 @@ const Register = () => {
             )}
 
             <div className="text-center ">
-              <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[15px]">
+              <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[15px]" onClick={handleGoogle}>
                 <FcGoogle />
               </button>
             </div>
