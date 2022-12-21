@@ -1,16 +1,31 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { TailSpin } from "react-loader-spinner";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
-
 const Login = () => {
+  const auth = getAuth();
+
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
+  let [success, setSuccess] = useState("");
   let [view, setView] = useState(true);
 
   let [emailerr, setEmailerr] = useState("");
   let [passworderr, setPassworderr] = useState("");
+  let [ferr, setFerr] = useState("");
+
+  let [loading, setLoading] = useState(false);
+
+  const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+    email
+  );
+  const strongPassword =
+    /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(
+      password
+    );
 
   let handleView = () => {
     if (!view) {
@@ -20,21 +35,58 @@ const Login = () => {
     }
   };
 
-  let handleEmail = (e)=>{
-    setEmail(e.target.value)
-    setEmailerr('')
-  }
-  let handlePassword = (e)=>{
-    setPassword(e.target.value)
-    setPassworderr('')
-  }
+  let handleEmail = (e) => {
+    setEmail(e.target.value);
+    setEmailerr("");
+  };
+  let handlePassword = (e) => {
+    setPassword(e.target.value);
+    setPassworderr("");
+  };
 
   let handleSubmit = () => {
     if (!email) {
       setEmailerr("email Required");
+    } else if (!validEmail) {
+      setEmailerr("Valid email Required");
     }
+
     if (!password) {
       setPassworderr("password Required");
+    }
+    //  else if (!/^(?=.*[a-z])/.test(password)) {
+    //   setPassworderr("lowercase Required");
+    // } else if (!/^(?=.*[A-Z])/.test(password)) {
+    //   setPassworderr("uppercase Required");
+    // } else if (!/^(?=.*[0-9])/.test(password)) {
+    //   setPassworderr("number Required");
+    // } else if (!/^(?=.*[!@#\$%\^&\*])/.test(password)) {
+    //   setPassworderr("symbol Required");
+    // } else if (!/^(?=.{8,})/.test(password)) {
+    //   setPassworderr("minimum 8 cherecter Required");
+    // }
+
+
+    //&&strongPassword
+    if (email && password && validEmail) {
+      setLoading(true)
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          setFerr("")
+          setLoading(false)
+          setSuccess("login successfull")
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+         if(errorCode.includes("auth/user-not-found")){
+          setFerr("user not found")
+          setLoading(false)
+         }else if(errorCode.includes("auth/wrong-password")){
+          setFerr("password incorrect")
+          setLoading(false)
+         }
+        });
     }
   };
 
@@ -44,7 +96,7 @@ const Login = () => {
         className="w-screen h-screen flex justify-items-center items-center"
         style={{
           // background: "#5F34F5",
-          background: "#807DC8"
+          background: "#807DC8",
           // backgroundImage: 'url("images/signBG.png")',
           // backgroundPosition: "center",
           // backgroundSize: "cover",
@@ -60,14 +112,14 @@ const Login = () => {
               Get started with login
             </p>
             <div className="relative">
-            <input
-              className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
+              <input
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
-              type="email"
-              placeholder="Email Adress"
-              onChange={handleEmail}
-            />
-            {emailerr ? (
+                type="email"
+                placeholder="Email Adress"
+                onChange={handleEmail}
+              />
+              {emailerr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
                   <h3 className="text-white font-normal font-nunito text-sm">
                     {emailerr}
@@ -86,7 +138,7 @@ const Login = () => {
                 onChange={handlePassword}
               />
               {passworderr ? (
-                <div className="bg-red px-[5px] py-[2px] rounded mt-[5px] absolute left-0 bottom-[-19px] w-full">
+                <div className="bg-red px-[5px] py-[2px] rounded mt-[5px] absolute left-0 bottom-[-14px] w-full">
                   <h3 className="text-white font-normal font-nunito text-sm">
                     {passworderr}
                   </h3>
@@ -96,30 +148,63 @@ const Login = () => {
               )}
 
               <button
-                className="absolute right-0 top-[50%] translate-y-[-50%] text-[18px] text-heading"
+                className="absolute right-[9px] top-[9px] text-[18px] text-heading"
                 onClick={handleView}
               >
                 {view ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
               </button>
             </div>
-            <button
-              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[15px]"
+            {loading ? (
+              <div className="w-full md:rounded-[50px] mt-[30px] py-[12px] mx-auto text-black flex justify-center items-center bg-primary">
+                <TailSpin
+                  height="30"
+                  width="30"
+                  color="#fff"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              </div>
+            ) : (
+              <button
+              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[30px]"
               onClick={handleSubmit}
             >
               login
             </button>
-           <div className="text-center ">
-           <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]">
-           <FcGoogle/>
-           </button>
-           </div>
+            )}
+            
+
+            {success ? (
+              <div className="bg-green px-[5px] py-[2px] rounded mt-[10px]  w-full">
+                <h3 className="text-white font-normal font-nunito text-sm">
+                  {success}
+                </h3>
+              </div>
+            ) : (
+              ""
+            )}
+            {ferr ? (
+              <div className="bg-red px-[5px] py-[2px] rounded mt-[10px]  w-full">
+                <h3 className="text-white font-normal font-nunito text-sm">
+                  {ferr}
+                </h3>
+              </div>
+            ) : (
+              ""
+            )}
+            <div className="text-center ">
+              <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]">
+                <FcGoogle />
+              </button>
+            </div>
             <div className="text-center mt-[5px]">
               <p className="text-center font-nunito text-heading text-sm font-normal">
                 Don't have an account ?{" "}
-                <span className="text-[#EA6C00] cursor-pointer">
-                    <NavLink to='/registration'>
-                    register
-                    </NavLink>
+                <span className="text-[#EA6C00] cursor-pointer capitalize">
+                  <NavLink to="/registration">register</NavLink>
                 </span>
               </p>
             </div>
