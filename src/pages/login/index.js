@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { TailSpin } from "react-loader-spinner";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const auth = getAuth();
+  const provider = new GoogleAuthProvider();
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -66,28 +72,51 @@ const Login = () => {
     //   setPassworderr("minimum 8 cherecter Required");
     // }
 
-
     //&&strongPassword
     if (email && password && validEmail) {
-      setLoading(true)
+      setLoading(true);
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          setFerr("")
-          setLoading(false)
-          setSuccess("login successfull")
+          setFerr("");
+          setLoading(false);
+          setSuccess("login successfull");
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
-         if(errorCode.includes("auth/user-not-found")){
-          setFerr("user not found")
-          setLoading(false)
-         }else if(errorCode.includes("auth/wrong-password")){
-          setFerr("password incorrect")
-          setLoading(false)
-         }
+          if (errorCode.includes("auth/user-not-found")) {
+            setFerr("user not found");
+            setLoading(false);
+          } else if (errorCode.includes("auth/wrong-password")) {
+            setFerr("password incorrect");
+            setLoading(false);
+          }
         });
     }
+  };
+
+  let handleGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        setSuccess("login successfull");
+        // ...
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        setFerr(errorCode);
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
   };
 
   return (
@@ -169,13 +198,12 @@ const Login = () => {
               </div>
             ) : (
               <button
-              className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[30px]"
-              onClick={handleSubmit}
-            >
-              login
-            </button>
+                className="w-full text-[20px] font-medium font-nunito py-[12px] bg-primary text-white capitalize md:rounded-[50px] mt-[30px]"
+                onClick={handleSubmit}
+              >
+                login
+              </button>
             )}
-            
 
             {success ? (
               <div className="bg-green px-[5px] py-[2px] rounded mt-[10px]  w-full">
@@ -195,8 +223,18 @@ const Login = () => {
             ) : (
               ""
             )}
+           <div className="text-center mt-[20px] cursor-pointer">
+           <NavLink to="/forgetpassword">
+              <h3 className="font-bold font-nunito text-sm text-primary capitalize">
+                forget password
+              </h3>
+            </NavLink>
+           </div>
             <div className="text-center ">
-              <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]">
+              <button
+                className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]"
+                onClick={handleGoogle}
+              >
                 <FcGoogle />
               </button>
             </div>

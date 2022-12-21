@@ -27,6 +27,7 @@ module.exports = {
       },
       boxShadow: {
         'search': '0 9px 6px -4px rgba(0, 0, 0, 0.3)',
+        'box': '0 0 10px rgba(0, 0, 0, 0.3)',
       },
     },
   },
