@@ -29,8 +29,8 @@ const Sidebar = ({ active }) => {
               <AiOutlineHome
                 className={`${
                   active == "home"
-                    ? " text-[30px] text-primary"
-                    : "text-[30px] text-white my-[25px]"
+                    ? "text-[25px] xl:text-[30px] text-primary"
+                    : "text-[25px] xl:text-[30px] text-white my-[25px]"
                 }`}
               />
             </li>
@@ -46,7 +46,7 @@ const Sidebar = ({ active }) => {
                 className={`${
                   active == "message"
                     ? "text-[25px] xl:text-[30px] text-primary"
-                    : "  text-[30px] text-white my-[25px]"
+                    : "text-[25px] xl:text-[30px] text-white my-[25px]"
                 }`}
               />
             </li>

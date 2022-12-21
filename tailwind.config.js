@@ -12,6 +12,7 @@ module.exports = {
       colors: {
         'primary': '#5F34F5',
         'heading': '#11175D',
+        'red':"#000000",
         'msg': 'rgba(77, 77, 77, 0.75)',
         'bl_opacity': 'rgba(0,0,0,.2)',
         'wh_opacity': 'rgba(255,255,255,.4)',
