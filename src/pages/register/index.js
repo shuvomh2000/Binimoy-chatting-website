@@ -180,7 +180,7 @@ const Register = () => {
             </p>
             <div className="relative">
               <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
                 type="email"
                 placeholder="Email Adress"
@@ -188,7 +188,7 @@ const Register = () => {
               />
               {emailerr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
-                  <h3 className="text-white font-normal font-nunito text-sm">
+                  <h3 className="text-white font-normal font-poppins text-sm">
                     {emailerr}
                   </h3>
                 </div>
@@ -198,15 +198,15 @@ const Register = () => {
             </div>
             <div className="relative">
               <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
-                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
+                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-poppins pb-[10px] mb-[20px]"
                 type="text"
                 placeholder="Full Name"
                 onChange={handleName}
               />
               {nameerr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
-                  <h3 className="text-white font-normal font-nunito text-sm">
+                  <h3 className="text-white font-normal font-poppins text-sm">
                     {nameerr}
                   </h3>
                 </div>
@@ -216,15 +216,15 @@ const Register = () => {
             </div>
             <div className="relative">
               <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
-                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px]  mb-[10px]"
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
+                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-poppins pb-[10px]  mb-[10px]"
                 type={view ? "password" : "text"}
                 placeholder="Password"
                 onChange={handlePassword}
               />
               {passworderr ? (
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-5px] absolute left-0 bottom-[-14px] w-full">
-                  <h3 className="text-white font-normal font-nunito text-sm">
+                  <h3 className="text-white font-normal font-poppins text-sm">
                     {passworderr}
                   </h3>
                 </div>
