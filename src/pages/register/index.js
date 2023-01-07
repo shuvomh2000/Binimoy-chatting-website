@@ -5,15 +5,18 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 import { TailSpin } from "react-loader-spinner";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 
 const Register = () => {
   const auth = getAuth();
-  const navigate = useNavigate()
+  const db = getDatabase();
+  const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
 
   let [email, setEmail] = useState("");
@@ -90,23 +93,41 @@ const Register = () => {
     if (email && name && password && validEmail) {
       setLoading(true);
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          sendEmailVerification(auth.currentUser).then(() => {
-            console.log("mail send");
-            setLoading(false);
-          });
-          setFerr("")
-          setSuccess("active your account via mail");
-          setLoading(false);
-          setTimeout(()=>{
-            navigate("/login")
-          },1500)
+        .then((user) => {
+          updateProfile(auth.currentUser, {
+            displayName: name,
+            photoURL: "images/user2.jpg",
+          })
+            .then(() => {
+              sendEmailVerification(auth.currentUser)
+                .then(() => {
+                  console.log("mail send");
+                })
+                .then(() => {
+                  set(ref(db, "users/" + user.user.uid), {
+                    name: user.user.displayName,
+                    email: user.user.email,
+                    photoURL: user.user.photoURL,
+                  }).then(() => {
+                    setFerr("");
+                    setSuccess("active your account via mail");
+                    setLoading(false);
+                    setTimeout(() => {
+                      navigate("/login");
+                    }, 1500);
+                  });
+                });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
+          setSuccess("");
           const errorCode = error.code;
-          if(errorCode.includes("auth/email-already-in-use")){
-            setFerr("Email already exits")
-          };
+          if (errorCode.includes("auth/email-already-in-use")) {
+            setFerr("Email already exits");
+          }
           setLoading(false);
         });
     }
@@ -259,7 +280,10 @@ const Register = () => {
             )}
 
             <div className="text-center ">
-              <button className="p-[10px] rounded-[50px]  border text-[25px] mt-[15px]" onClick={handleGoogle}>
+              <button
+                className="p-[10px] rounded-[50px]  border text-[25px] mt-[15px]"
+                onClick={handleGoogle}
+              >
                 <FcGoogle />
               </button>
             </div>

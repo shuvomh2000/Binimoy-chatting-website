@@ -1,23 +1,36 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React,{useEffect} from "react";
+import {useNavigate, NavLink} from 'react-router-dom'
+import { getAuth } from "firebase/auth";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 
 const Sidebar = ({ active }) => {
+  const auth = getAuth();
+  const navigate = useNavigate()
+  let currentUser = auth.currentUser
+    
+useEffect(()=>{
+  if(!auth.currentUser){
+    navigate("/login")
+  }
+},[])
   return (
     <div className="w-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static">
       <div className="xl:pt-[38px] flex xl:block justify-center">
-        <div className="w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] bg-white xl:mx-auto my-auto">
+        <div className="w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto">
           <picture>
             <img
               className="object-cover"
-              src="images/user1.png"
+              // src="images/user.jpg"
+              src={currentUser.photoURL}
               loading="lazy"
             />
           </picture>
         </div>
+        {/* {curentUser.displayName} */}
+        <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px]">{currentUser.displayName}</h3>
         <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
           <NavLink to="/">
             <li

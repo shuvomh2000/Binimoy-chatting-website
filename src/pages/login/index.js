@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -12,6 +12,7 @@ import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const auth = getAuth();
+  const navigate = useNavigate()
   const provider = new GoogleAuthProvider();
 
   let [email, setEmail] = useState("");
@@ -80,7 +81,9 @@ const Login = () => {
           setFerr("");
           setLoading(false);
           setSuccess("login successfull");
-          // ...
+          setTimeout(()=>{
+            navigate("/")
+          },1500)
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -142,7 +145,7 @@ const Login = () => {
             </p>
             <div className="relative">
               <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-normal font-poppins text-heading  
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
                 type="email"
                 placeholder="Email Adress"
@@ -160,7 +163,7 @@ const Login = () => {
             </div>
             <div className="relative">
               <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
                 placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px]  mb-[10px]"
                 type={view ? "password" : "text"}
                 placeholder="Password"

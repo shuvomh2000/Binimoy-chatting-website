@@ -1,5 +1,5 @@
-import React from 'react'
-import {NavLink} from 'react-router-dom'
+import React, { useEffect } from 'react'
+import {useNavigate, NavLink} from 'react-router-dom'
 import BlockedUser from '../../components/BlockedUser'
 import FriendRequest from '../../components/FriendRequest'
 import Friends from '../../components/Friends'
@@ -8,11 +8,20 @@ import Groups from '../../components/Groups'
 import Search from '../../components/Search'
 import Sidebar from '../../components/Sidebar'
 import UserList from '../../components/UserList'
+import { getAuth } from "firebase/auth";
 
 
 const Home = () => {
+  const auth = getAuth();
+  const navigate = useNavigate()
+  console.log(auth.currentUser)
 
-
+  
+useEffect(()=>{
+  if(!auth.currentUser){
+    navigate("/login")
+  }
+},[])
   
 
   return (
