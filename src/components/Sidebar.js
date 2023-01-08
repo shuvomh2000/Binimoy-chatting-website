@@ -1,16 +1,23 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { getAuth } from "firebase/auth";
+import { getAuth,updateProfile } from "firebase/auth";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FiLogOut, FiUploadCloud } from "react-icons/fi";
 import { TailSpin } from "react-loader-spinner";
-import { getStorage, ref, uploadString } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from "firebase/storage";
+
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
 const Sidebar = ({ active }) => {
   const storage = getStorage();
-  const storageRef = ref(storage, "some-child");
   const auth = getAuth();
   const navigate = useNavigate();
   let currentUser = auth.currentUser;
@@ -19,22 +26,62 @@ const Sidebar = ({ active }) => {
   let [show, setShow] = useState(false);
 
 
+  const [image, setImage] = useState();
+  const [imgName, setImgName] = useState("");
+  const [cropper, setCropper] = useState();
+
   useEffect(() => {
     if (!auth.currentUser) {
       navigate("/login");
     }
   }, []);
 
-
-
-
-
   let handleImageUpload = () => {
     setShow(!show);
   };
 
+  let handleImage = (e) => {
+    // console.log(e.target)
+    setImgName(e.target.files[0].name);
+    let files;
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files;
+    } else if (e.target) {
+      files = e.target.files;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setImage(reader.result);
+    };
+    reader.readAsDataURL(files[0]);
+  };
 
-
+  const getCropData = () => {
+    setLoading(true)
+    if (typeof cropper !== "undefined") {
+      const storageRef = ref(storage, imgName);
+      // setCropData();
+      const message4 = cropper.getCroppedCanvas().toDataURL();
+      uploadString(storageRef, message4, "data_url").then((snapshot) => {
+        getDownloadURL(storageRef).then((downloadURL) => {
+          updateProfile(auth.currentUser, {
+            photoURL: downloadURL,
+          })
+            .then(() => {
+              console.log("profile picture upload")
+              setCropper('')
+              setImgName('')
+              setImage('')
+              setLoading(false)
+              setShow(false)
+            })
+            .catch((error) => {
+              console.log(error)
+            });
+        });
+      });
+    }
+  };
 
   return (
     <>
@@ -45,6 +92,7 @@ const Sidebar = ({ active }) => {
               <img
                 className="object-cover"
                 // src="images/user.jpg"
+                // src="images/user2.png"
                 src={currentUser.photoURL}
                 loading="lazy"
               />
@@ -59,6 +107,7 @@ const Sidebar = ({ active }) => {
 
           {/* {curentUser.displayName} */}
           <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px]">
+            {/* cndkjsvn */}
             {currentUser.displayName}
           </h3>
           <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
@@ -134,61 +183,93 @@ const Sidebar = ({ active }) => {
           </div>
         </div>
       </div>
-      {show && (
-        <div className="w-screen h-screen bg-dark_opacity fixed top-0 left-0 z-[9999] flex justify-center items-center">
-          <div className="p-[30px]  bg-white rounded-md">
-            <h2 className="text-center text-4xl font-bold text-primary font-nunito capitalize mb-[40px]">
-              image upload
-            </h2>
-            <div className="relative">
-              <input
-                // onChange={handleImage}
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
-         placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[10px]"
-                type="file"
-              />
-            </div>
 
-            {loading ? (
-              <>
-                <div className="flex gap-x-2.5">
-                  <div className="w-1/2 mt-[30px] py-[12px] mx-auto text-black flex justify-center items-center bg-primary">
-                    <TailSpin
-                      height="30"
-                      width="30"
-                      color="#fff"
-                      ariaLabel="tail-spin-loading"
-                      radius="1"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                      visible={true}
-                    />
+      {show && (
+        <>
+          <div className="w-screen h-screen bg-dark_opacity fixed top-0 left-0 z-[9999] flex justify-center items-center">
+            <div className="p-[30px]  bg-white rounded-md">
+              <h2 className="text-center text-4xl font-bold text-primary font-nunito capitalize mb-[40px]">
+                image upload
+              </h2>
+              <div>
+                {image && (
+                  <div className="flex justify-around">
+                    <div className="max-w-[250px] max-h-[250px]">
+                      <Cropper
+                        style={{ height: 150, width: "50%" }}
+                        zoomTo={0.5}
+                        initialAspectRatio={1}
+                        preview=".img-preview"
+                        src={image}
+                        viewMode={1}
+                        minCropBoxHeight={10}
+                        minCropBoxWidth={10}
+                        background={false}
+                        responsive={true}
+                        autoCropArea={1}
+                        checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+                        onInitialized={(instance) => {
+                          setCropper(instance);
+                        }}
+                        guides={true}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <div className="image w-[100px] h-[100px] rounded-[50%] overflow-hidden border-[5px] border-solid border-primary">
+                        <div className="img-preview w-full h-full"></div>
+                      </div>
+                    </div>
                   </div>
-                  <button className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-red text-white capitalize mt-[30px]">
-                    cancel
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="flex gap-x-2.5">
-                  <button
-                    // onClick={getCropData}
-                    className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-primary text-white capitalize mt-[30px]"
-                  >
-                    upload
-                  </button>
-                  <button
-                    onClick={handleImageUpload}
-                    className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-red text-white capitalize mt-[30px]"
-                  >
-                    cancel
-                  </button>
-                </div>
-              </>
-            )}
+                )}
+                <input
+                  onChange={handleImage}
+                  type="file"
+                  className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-nunito text-heading  
+         placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[10px] mt-[20px]"
+                />
+              </div>
+
+              {loading ? (
+                <>
+                  <div className="flex gap-x-2.5">
+                    <div className="w-1/2 mt-[30px] py-[12px] mx-auto text-black flex justify-center items-center bg-primary">
+                      <TailSpin
+                        height="30"
+                        width="30"
+                        color="#fff"
+                        ariaLabel="tail-spin-loading"
+                        radius="1"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                      />
+                    </div>
+                    <button className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-red text-white capitalize mt-[30px]">
+                      cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-x-2.5">
+                    <button
+                      onClick={getCropData}
+                      className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-primary text-white capitalize mt-[30px]"
+                    >
+                      upload
+                    </button>
+                    <button
+                      onClick={handleImageUpload}
+                      className="w-1/2 text-[20px] font-medium font-nunito py-[12px] px-[6px] bg-red text-white capitalize mt-[30px]"
+                    >
+                      cancel
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

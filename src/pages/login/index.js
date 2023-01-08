@@ -122,6 +122,10 @@ const Login = () => {
       });
   };
 
+  let handleImage = (e)=>{
+    console.log(e.target.files)
+  }
+
   return (
     <div className="login">
       <div
