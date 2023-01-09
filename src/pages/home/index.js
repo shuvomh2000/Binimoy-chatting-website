@@ -14,7 +14,6 @@ import { getAuth } from "firebase/auth";
 const Home = () => {
   const auth = getAuth();
   const navigate = useNavigate()
-  console.log(auth.currentUser)
 
   
 useEffect(()=>{

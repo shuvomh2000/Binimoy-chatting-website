@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue,set,push,remove } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import {RxCross2} from "react-icons/rx"
 import {AiOutlineCheck} from "react-icons/ai"
@@ -11,24 +11,33 @@ const FriendRequest = () => {
   let [friendRequests, setFriendRequests] = useState([]);
 
   useEffect(() => {
-    // const starCountRef = ref(db, "friendrequest/" );
-    // onValue(starCountRef, (snapshot) => {
-    //   const data = snapshot.val();
-    //   updateStarCount(postElement, data);
-    // });
-
     const friendRequestsRef = ref(db, "friendrequest/");
     onValue(friendRequestsRef, (snapshot) => {
 
     let arr = [];
     snapshot.forEach((item) => {
       if (item.val().recever_id == auth.currentUser.uid) {
-        arr.push(item.val());
+        arr.push({...item.val(),id:item.key});
       }
     });
     setFriendRequests(arr);
     });
   }, []);
+
+  let handleAccept = (item)=>{
+    set(push(ref(db, "friends")), {
+      acceptId: auth.currentUser.uid,
+      acceptname: auth.currentUser.displayName,
+      senderId: item.sender_id,
+      sendername: item.sender_name,
+    }).then(()=>{
+      remove(ref(db,"friendrequest/" + item.id))
+    })
+  }
+
+
+
+
 
   return (
     <div className="shadow-md p-[20px] rounded-[20px]">
@@ -62,7 +71,9 @@ const FriendRequest = () => {
                 <button className=" bg-red text-white w-[25px] h-[25px] flex justify-center items-center rounded font-normal text-xl capitalize ">
                   <RxCross2/>
                 </button>
-                <button className="bg-green text-white w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center">
+                <button
+                onClick={()=>handleAccept(item)}
+                 className="bg-green text-white w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center">
                 <AiOutlineCheck/>
                 </button>
               </div>

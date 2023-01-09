@@ -13,7 +13,7 @@ module.exports = {
         red: "#ff0f0f",
         green: "#228B22",
         msg: "rgba(77, 77, 77, 0.75)",
-        bl_opacity: "rgba(0,0,0,.2)",
+        bl_opacity: "rgba(0,0,0,.3)",
         dark_opacity: "rgba(0,0,0,.5)",
         wh_opacity: "rgba(255,255,255,.4)",
       },

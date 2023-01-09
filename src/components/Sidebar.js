@@ -4,7 +4,8 @@ import { getAuth,updateProfile } from "firebase/auth";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { FiLogOut, FiUploadCloud } from "react-icons/fi";
+import { FiLogOut} from "react-icons/fi";
+import { CiImageOn } from "react-icons/ci";
 import { TailSpin } from "react-loader-spinner";
 import {
   getStorage,
@@ -87,7 +88,7 @@ const Sidebar = ({ active }) => {
     <>
       <div className="w-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static">
         <div className="xl:pt-[38px] flex xl:block justify-center">
-          <div className="relative group w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto">
+          <div className="relative group w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer">
             <picture>
               <img
                 className="object-cover"
@@ -101,7 +102,7 @@ const Sidebar = ({ active }) => {
               onClick={handleImageUpload}
               className="w-[50px] hidden group-hover:block h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-bl_opacity xl:mx-auto my-auto absolute top-0 left-0"
             >
-              <FiUploadCloud className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white text-[30px]" />
+              <CiImageOn className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-wh_opacity text-[30px]" />
             </div>
           </div>
 
