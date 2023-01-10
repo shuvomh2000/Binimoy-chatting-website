@@ -8,7 +8,6 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import { AiOutlinePlus } from "react-icons/ai";
 
 const UserList = () => {
   const db = getDatabase();
@@ -16,7 +15,7 @@ const UserList = () => {
   let [userList, setUserList] = useState([]);
   let [friendrequestcheck, setFriendrequestcheck] = useState([]);
   let [friendRequests, setFriendRequests] = useState([]);
-  let [idcheck, setIdcheck] = useState();
+  // let [idcheck, setIdcheck] = useState();
 
   useEffect(() => {
     const usersRef = ref(db, "users/");
@@ -24,22 +23,21 @@ const UserList = () => {
       let arr = [];
       snapshot.forEach((item) => {
         if (item.key !== auth.currentUser.uid) {
-          arr.push({ ...item.val(), id: item.key });
+          arr.unshift({ ...item.val(), id: item.key });
         }
       });
       setUserList(arr);
     });
   }, []);
-
   // for cancel
   useEffect(() => {
     const friendRequestsRef = ref(db, "friendrequest/");
     onValue(friendRequestsRef, (snapshot) => {
-    let arr = [];
-    snapshot.forEach((item)=>{
-      arr.push({...item.val(),id:item.key})
-    })
-    setFriendRequests(arr);
+      let arr = [];
+      snapshot.forEach((item) => {
+        arr.push({ ...item.val(), id: item.key });
+      });
+      setFriendRequests(arr);
     });
   }, []);
 
@@ -50,8 +48,8 @@ const UserList = () => {
       sender_name: auth.currentUser.displayName,
       recever_id: item.id,
       recever_name: item.name,
-      id:auth.currentUser.uid+item.id
-    })
+      id: auth.currentUser.uid + item.id,
+    });
   };
 
   //for btn
@@ -67,11 +65,11 @@ const UserList = () => {
   }, []);
 
   let handleCancel = (details) => {
-    friendRequests.map((item)=>{
-      if(auth.currentUser.uid+details.id == item.id){
-        remove(ref(db,"friendrequest/" + item.id))
+    friendRequests.map((item) => {
+      if (auth.currentUser.uid + details.id == item.id) {
+        remove(ref(db, "friendrequest/" + item.id));
       }
-    })
+    });
   };
 
   return (
@@ -87,7 +85,7 @@ const UserList = () => {
         <div className=" overflow-y-auto max-h-[380px]">
           {/*  */}
           {userList.map((item) => (
-            <div className="flex justify-between py-[10px] border-b border-solid">
+            <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
               <div className="flex">
                 <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
                   <picture>
@@ -98,7 +96,6 @@ const UserList = () => {
                 <div className="ml-[10px] flex items-center">
                   <h4 className="font-poppins text-black text-sm font-semibold capitalize">
                     {item.name}
-                    {/* adgfggfd */}
                   </h4>
                   {/* <p className="font-poppins text-msg text-sm font-normal">
                   {item.email}
@@ -107,21 +104,12 @@ const UserList = () => {
               </div>
               <div className="flex items-center">
                 {friendrequestcheck.includes(item.id + auth.currentUser.uid) ? (
-                  <button
-                    onClick={() => handleCancel(item)}
-                    className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
-                  >
+                  <button onClick={()=>handleCancel(item)} className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
                     cancel
                   </button>
                 ) : (
-                  <button
-                    onClick={() => handleSendFriendRequest(item)}
-                    className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
-                  >
-                    {/* className="bg-primary text-white w-[25px] h-[25px] flex justify-center items-center rounded font-normal text-xl"
-                > */}
+                  <button onClick={()=>handleSendFriendRequest(item)} className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
                     send
-                    {/* <AiOutlinePlus/> */}
                   </button>
                 )}
               </div>
