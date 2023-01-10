@@ -1,4 +1,6 @@
 import React from "react";
+import { getDatabase, ref, onValue,set,push,remove } from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const Friends = () => {
   return (

@@ -16,7 +16,7 @@ const UserList = () => {
   let [userList, setUserList] = useState([]);
   let [friendrequestcheck, setFriendrequestcheck] = useState([]);
   let [friendRequests, setFriendRequests] = useState([]);
-
+  let [idcheck, setIdcheck] = useState();
 
   useEffect(() => {
     const usersRef = ref(db, "users/");
@@ -36,25 +36,25 @@ const UserList = () => {
     const friendRequestsRef = ref(db, "friendrequest/");
     onValue(friendRequestsRef, (snapshot) => {
     let arr = [];
-    snapshot.forEach((item) => {
-      if (item.val().recever_id == auth.currentUser.uid) {
-        arr.push({...item.val(),id:item.key});
-      }
-    });
+    snapshot.forEach((item)=>{
+      arr.push({...item.val(),id:item.key})
+    })
     setFriendRequests(arr);
     });
   }, []);
 
   // send request
   let handleSendFriendRequest = (item) => {
-    set(push(ref(db, "friendrequest")), {
+    set(ref(db, "friendrequest/" + auth.currentUser.uid + item.id), {
       sender_id: auth.currentUser.uid,
       sender_name: auth.currentUser.displayName,
       recever_id: item.id,
       recever_name: item.name,
-    });
+      id:auth.currentUser.uid+item.id
+    })
   };
- //for btn
+
+  //for btn
   useEffect(() => {
     const friendRequestsRef = ref(db, "friendrequest/");
     onValue(friendRequestsRef, (snapshot) => {
@@ -66,12 +66,12 @@ const UserList = () => {
     });
   }, []);
 
-  // useEffect(()=>{
-    
-  // },[])
-
-  let handleCancel = (item ) => {
-
+  let handleCancel = (details) => {
+    friendRequests.map((item)=>{
+      if(auth.currentUser.uid+details.id == item.id){
+        remove(ref(db,"friendrequest/" + item.id))
+      }
+    })
   };
 
   return (
