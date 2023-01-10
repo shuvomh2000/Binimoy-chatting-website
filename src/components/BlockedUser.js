@@ -19,7 +19,8 @@ const BlockedUser = () => {
     onValue(blockusersRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.key !== auth.currentUser.uid) {
+        if (item.key == auth.currentUser.uid) {
+          console.log(item.val())
           arr.unshift({ ...item.val(), id: item.key });
         }
         

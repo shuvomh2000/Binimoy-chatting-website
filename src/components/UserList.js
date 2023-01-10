@@ -15,6 +15,7 @@ const UserList = () => {
   let [userList, setUserList] = useState([]);
   let [friendrequestcheck, setFriendrequestcheck] = useState([]);
   let [friendRequests, setFriendRequests] = useState([]);
+  let [friendlist, setFriendlist] = useState([]);
   // let [idcheck, setIdcheck] = useState();
 
   useEffect(() => {
@@ -41,17 +42,6 @@ const UserList = () => {
     });
   }, []);
 
-  // send request
-  let handleSendFriendRequest = (item) => {
-    set(ref(db, "friendrequest/" + auth.currentUser.uid + item.id), {
-      sender_id: auth.currentUser.uid,
-      sender_name: auth.currentUser.displayName,
-      recever_id: item.id,
-      recever_name: item.name,
-      id: auth.currentUser.uid + item.id,
-    });
-  };
-
   //for btn
   useEffect(() => {
     const friendRequestsRef = ref(db, "friendrequest/");
@@ -64,6 +54,30 @@ const UserList = () => {
     });
   }, []);
 
+  // friend or send requesst btn
+  useEffect(() => {
+    const usersRef = ref(db, "friends/");
+    onValue(usersRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        arr.unshift(item.val().acceptId + item.val().senderId);
+      });
+      setFriendlist(arr);
+    });
+  }, []);
+
+  // send request
+  let handleSendFriendRequest = (item) => {
+    set(ref(db, "friendrequest/" + auth.currentUser.uid + item.id), {
+      sender_id: auth.currentUser.uid,
+      sender_name: auth.currentUser.displayName,
+      recever_id: item.id,
+      recever_name: item.name,
+      id: auth.currentUser.uid + item.id,
+    });
+  };
+
+  // cancel btn
   let handleCancel = (details) => {
     friendRequests.map((item) => {
       if (auth.currentUser.uid + details.id == item.id) {
@@ -103,12 +117,27 @@ const UserList = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                {friendrequestcheck.includes(item.id + auth.currentUser.uid) ? (
-                  <button onClick={()=>handleCancel(item)} className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
+                {friendlist.includes(item.id + auth.currentUser.uid) ||
+                friendlist.includes(auth.currentUser.uid + item.id) ? (
+                  <button
+                    className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                  >
+                    friend
+                  </button>
+                ) : friendrequestcheck.includes(
+                    item.id + auth.currentUser.uid
+                  ) ? (
+                  <button
+                    onClick={() => handleCancel(item)}
+                    className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                  >
                     cancel
                   </button>
                 ) : (
-                  <button onClick={()=>handleSendFriendRequest(item)} className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
+                  <button
+                    onClick={() => handleSendFriendRequest(item)}
+                    className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                  >
                     send
                   </button>
                 )}
