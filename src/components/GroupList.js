@@ -14,7 +14,10 @@ const GroupList = () => {
   const auth = getAuth();
 
   let [grp, setGrp] = useState([]);
+  let [grpitem, setGrpItem] = useState([]);
   let [joinbtn, setJoinbtn] = useState([]);
+  let [grpmember, setGrpMember] = useState([]);
+
 
   useEffect(() => {
     const groupsRef = ref(db, "groups/");
@@ -29,6 +32,20 @@ const GroupList = () => {
     });
   }, []);
 
+  // useEffect(()=>{
+  //   grpmember.map((item)=>{
+  //     grp.map((gitem)=>{
+  //         if(gitem.id !== item.gid){
+  //           let arr = []
+  //           arr.push(gitem)
+  //           setGrpItem(arr)
+  //         }else{
+  //           console.log("mile nai")
+  //         }
+  //     })
+  //   })
+  // },[])
+
   useEffect(() => {
     const groupJoinRequestRef = ref(db, "groupJoinRequest/");
     onValue(groupJoinRequestRef, (snapshot) => {
@@ -37,6 +54,17 @@ const GroupList = () => {
         arr.unshift(item.val().gid + item.val().userid);
       });
       setJoinbtn(arr);
+    });
+  }, []);
+
+  useEffect(() => {
+    const groupmembersRef = ref(db, "groupmembers/");
+    onValue(groupmembersRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        arr.unshift({...item.val(),id:item.key});
+      });
+      setGrpMember(arr);
     });
   }, []);
 

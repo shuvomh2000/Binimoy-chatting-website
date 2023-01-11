@@ -11,7 +11,8 @@ import { getAuth } from "firebase/auth";
 import { BsTrash } from "react-icons/bs";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { RxCross1, RxCross2 } from "react-icons/rx";
-import { AiOutlineCheck } from "react-icons/ai";
+import { AiOutlineCheck } from "react-icons/ai"; 
+import { BiExit } from "react-icons/bi"; 
 
 const Groups = () => {
   const db = getDatabase();
@@ -20,10 +21,9 @@ const Groups = () => {
   let [show, setShow] = useState(false);
   let [groupusershow, setGroupUserShow] = useState(false);
   let [grp, setGrp] = useState([]);
-  let [grpmemberreqcheck, setGrpMemberReqCheck] = useState([]);
+  let [grpmember, setGrpMember] = useState([]);
   let [grpmemberreq, setGrpMemberReq] = useState([]);
   let [grpname, setGrpname] = useState("");
-  let [grpmemberempty, setGrpMemberEmpty] = useState();
   let [grpbio, setGrpbio] = useState("");
   let [grperr, setGrperr] = useState("");
 
@@ -32,7 +32,8 @@ const Groups = () => {
     onValue(groupsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().admin == auth.currentUser.uid) {
+        if (item.val().admin == auth.currentUser.uid
+        ) {
           arr.unshift({ ...item.val(), id: item.key });
         }
       });
@@ -41,16 +42,7 @@ const Groups = () => {
   }, []);
 
   // useEffect(() => {
-  //   const groupJoinRequestRef = ref(db, "groupJoinRequest/");
-  //   onValue(groupJoinRequestRef, (snapshot) => {
-  //     let arr = [];
-  //     snapshot.forEach((item) => {
-  //       if (auth.currentUser.uid !== item.val().userid ) {
-  //         arr.unshift({ ...item.val(), id: item.key });
-  //       }
-  //     });
-  //     setGrpMemberReqCheck(arr);
-  //   });
+    
   // }, []);
 
   let handleModal = () => {
@@ -86,31 +78,61 @@ const Groups = () => {
     }
   };
 
-  let handleGroupUserShow = (item)=>{
-    setGroupUserShow(!groupusershow)
+  let handleGroupUserShow = (item) => {
+    setGroupUserShow(!groupusershow);
     const groupJoinRequestRef = ref(db, "groupJoinRequest/");
     onValue(groupJoinRequestRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((gitem) => {
-        if(item.id == gitem.val().gid){
-            arr.unshift({ ...gitem.val(), id: gitem.key });
-          }
+        if (item.id == gitem.val().gid) {
+          arr.unshift({ ...gitem.val(), id: gitem.key });
+        }
       });
       setGrpMemberReq(arr);
-      setGrpMemberEmpty(arr)
     });
-  }
 
-  let handleJoinRequestCancel =(item)=>{
+    const groupmembersRef = ref(db, "groupmembers/");
+    onValue(groupmembersRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((gitem) => {
+        // console.log("glist", gitem.val().gid )
+        // console.log("item", item.id)
+        if (auth.currentUser.uid !== gitem.val().userid 
+        && gitem.val().gid == item.id
+        ) {
+          arr.unshift({ ...gitem.val(), id: gitem.key });
+        }
+      });
+      setGrpMember(arr);
+    });
+  };
+
+  let handleJoinRequestCancel = (item) => {
     remove(ref(db, "groupJoinRequest/" + item.id));
-  }
+  };
+
+  let handleJoinRequestAccept = (item) => {
+    set(push(ref(db, "groupmembers")), {
+      adminid: item.adminid,
+      adminName: item.adminName,
+      gName: item.gname,
+      gid: item.gid,
+      gtag: item.gtag,
+      userid: item.userid,
+      userName: item.username,
+      userProfile: item.userprofile,
+      key: item.id,
+    }).then(() => {
+      remove(ref(db, "groupJoinRequest/" + item.id));
+    });
+  };
   return (
     <>
       <div className="shadow-md p-[20px] rounded-[20px]">
         <div>
           <div className="flex justify-between ">
             <h3 className="font-poppins text-black text-xl font-semibold capitalize">
-              my groups{" "}
+              my groups
               <span className="font-normal text-[16px]">({grp.length})</span>
             </h3>
             <button
@@ -136,14 +158,14 @@ const Groups = () => {
                       {item.groupName}
                     </h4>
                     <p className="font-poppins text-msg text-sm font-normal">
-                      {item.date}
+                      admin:{item.adminName}
                     </p>
                   </div>
                 </div>
                 <div className="flex gap-x-[10px] items-center">
                   <button
                     onClick={() => handleGroupDelete(item)}
-                    className="hidden group-hover:block ease-in-out  text-red w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center"
+                    className="hidden group-hover:block ease-in-out text-red w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center"
                   >
                     <BsTrash />
                   </button>
@@ -220,54 +242,78 @@ const Groups = () => {
         <div className="w-screen h-screen fixed top-0 left-0 bg-dark_opacity z-[9999] flex justify-center">
           <div>
             <div className="p-[30px] max-h-[90vh] bg-white mt-[30px] rounded-md">
-              <div className="flex gap-x-[55px] justity-between">
+              <div className="flex gap-x-[55px] justity-between border-b border-solid">
                 <h3 className="font-poppins text-primary text-xl font-semibold capitalize mb-[25px] text-center">
                   group manage user
                 </h3>
                 <button
                   onClick={() => setGroupUserShow(!groupusershow)}
-                  className="text-black w-[25px] h-[25px] rounded font-normal text-[18px]  capitalize flex justify-center items-center"
+                  className="text-heading w-[25px] h-[25px] rounded font-normal text-[18px]  capitalize flex justify-center items-center"
                 >
                   <RxCross1 />
                 </button>
               </div>
-
-              {grpmemberreq==""?
-              <h4 className="font-poppins text-bl_opacity text-sm font-semibold capitalize">
-              group member empty...
-            </h4>
-              :
-              grpmemberreq.map((item) => (
-                <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
-                  <div className="flex">
-                    <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
-                      <picture>
-                        <img src={item.userprofile} />
-                      </picture>
+              {grpmemberreq == "" && grpmember ==""? (
+                <h4 className="font-poppins text-bl_opacity text-sm font-semibold capitalize">
+                  group is empty...
+                </h4>
+              ) : (
+                <>
+               { grpmemberreq.map((item) => (
+                  <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
+                    <div className="flex">
+                      <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
+                        <picture>
+                          <img src={item.userprofile} />
+                        </picture>
+                      </div>
+                      <div className="ml-[10px] flex items-center">
+                        <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                          {item.username}
+                        </h4>
+                      </div>
                     </div>
-                    <div className="ml-[10px] flex items-center">
-                      <h4 className="font-poppins text-black text-sm font-semibold capitalize">
-                        {item.username}
-                      </h4>
-                      {/* <p className="font-poppins text-msg text-sm font-normal">
-                      Dinner
-                    </p> */}
+                    <div className="flex gap-x-[10px]  items-center">
+                      <button
+                        onClick={() => handleJoinRequestCancel(item)}
+                        className=" bg-red text-white w-[25px] h-[25px] flex justify-center items-center rounded font-normal text-xl capitalize "
+                      >
+                        <RxCross2 />
+                      </button>
+                      <button
+                        onClick={() => handleJoinRequestAccept(item)}
+                        className="bg-green text-white w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center"
+                      >
+                        <AiOutlineCheck />
+                      </button>
                     </div>
                   </div>
-                  <div className="flex gap-x-[10px]  items-center">
-                    <button
-                    onClick={()=>handleJoinRequestCancel(item)}
-                    className=" bg-red text-white w-[25px] h-[25px] flex justify-center items-center rounded font-normal text-xl capitalize ">
-                      <RxCross2 />
-                    </button>
-                    <button className="bg-green text-white w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center">
-                      <AiOutlineCheck />
-                    </button>
+                ))}
+                 {grpmember.map((item)=>(
+                  <div className="group flex justify-between py-[10px] border-b border-solid last:border-0">
+                    <div className="flex">
+                      <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
+                        <picture>
+                          <img src={item.userProfile} />
+                        </picture>
+                      </div>
+                      <div className="ml-[10px] flex items-center">
+                        <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                          {item.userName}
+                        </h4>
+                      </div>
+                    </div>
+                    <div className="flex gap-x-[10px]  items-center">
+                      <button
+                        className="hidden group-hover:block ease-in-out text-red w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center"
+                      >
+                        <BiExit />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
-              }
-              
+                ))}
+                </>
+              )}
             </div>
           </div>
         </div>

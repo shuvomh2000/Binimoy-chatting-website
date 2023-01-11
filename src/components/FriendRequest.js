@@ -44,6 +44,10 @@ const FriendRequest = () => {
     });
   };
 
+  let handleCancel = (item) =>{
+    remove(ref(db, "friendrequest/" + item.id));
+  }
+
   return (
     <div className="shadow-md p-[20px] rounded-[20px]">
       <div className="flex justify-between ">
@@ -72,7 +76,9 @@ const FriendRequest = () => {
                   </p> */}
                 </div>
               </div>
-              <div className="flex gap-x-[10px]  items-center">
+              <div
+              onClick={()=>handleCancel(item)}
+              className="flex gap-x-[10px]  items-center">
                 <button className=" bg-red text-white w-[25px] h-[25px] flex justify-center items-center rounded font-normal text-xl capitalize ">
                   <RxCross2 />
                 </button>
