@@ -50,7 +50,6 @@ console.log(item)
             <div className="flex">
               <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
                 <picture>
-                  {/* <img src="images/user2.png" /> */}
                   <img src="images/user2.jpg" />
                 </picture>
               </div>

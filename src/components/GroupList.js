@@ -14,6 +14,7 @@ const GroupList = () => {
   const auth = getAuth();
 
   let [grp, setGrp] = useState([]);
+  let [joinbtn, setJoinbtn] = useState([]);
 
   useEffect(() => {
     const groupsRef = ref(db, "groups/");
@@ -27,6 +28,33 @@ const GroupList = () => {
       setGrp(arr);
     });
   }, []);
+
+  useEffect(() => {
+    const groupJoinRequestRef = ref(db, "groupJoinRequest/");
+    onValue(groupJoinRequestRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        arr.unshift(item.val().gid + item.val().userid);
+      });
+      setJoinbtn(arr);
+    });
+  }, []);
+
+  let handleGroupJoinRequest = (item) => {
+    set(push(ref(db, "groupJoinRequest")), {
+      adminid: item.admin,
+      adminName: item.adminName,
+      gid: item.id,
+      gname: item.groupName,
+      gtag: item.groupTag,
+      userid: auth.currentUser.uid,
+      username: auth.currentUser.displayName,
+      userprofile: auth.currentUser.photoURL,
+      btncheck: item.id + auth.currentUser.uid,
+    });
+
+  };
+
   return (
     <div className="shadow-md p-[20px] rounded-[20px]">
       <div>
@@ -51,15 +79,24 @@ const GroupList = () => {
                   <h4 className="font-poppins text-black text-sm font-semibold capitalize">
                     {item.groupName}
                   </h4>
-                  <p className="font-poppins text-msg text-sm font-normal">
-                    {item.date}
+                  <p className="font-poppins text-msg text-[10px] font-normal">
+                    admin:{item.adminName}
                   </p>
                 </div>
               </div>
               <div>
-                <button className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
-                  join
-                </button>
+                {joinbtn.includes(item.id + auth.currentUser.uid) ? (
+                  <button className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize">
+                    pending
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleGroupJoinRequest(item)}
+                    className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                  >
+                    join
+                  </button>
+                )}
               </div>
             </div>
           ))}
