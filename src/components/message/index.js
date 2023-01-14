@@ -11,6 +11,7 @@ import {
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
 import Friends from "../Friends";
+import Chat from "../Chat";
 
 const Message = () => {
   const db = getDatabase();
@@ -50,7 +51,7 @@ const Message = () => {
       <div className="w-[14%]">
         <Sidebar active="message" />
       </div>
-      <div className="w-[84%]">
+      <div className="w-[84%] flex justify-between">
         <div className="w-[30%] h-screen flex flex-wrap">
           <div className="w-full">
             <Search />
@@ -70,8 +71,7 @@ const Message = () => {
                       ({grp.length})
                     </span> */}
                   </h3>
-                  <button>
-                  </button>
+                  <button>...</button>
                 </div>
                 {mygrp.map((item) => (
                   <div>
@@ -121,6 +121,14 @@ const Message = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+        <div className="w-[67%] shadow-xl border border-solid h-screen p-[30px]">
+          <div>
+            <div>
+
+              <Chat/>
             </div>
           </div>
         </div>

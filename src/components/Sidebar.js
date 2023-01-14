@@ -31,12 +31,6 @@ const Sidebar = ({ active }) => {
   const [imgName, setImgName] = useState("");
   const [cropper, setCropper] = useState();
 
-  useEffect(() => {
-    if (!auth.currentUser) {
-      navigate("/login");
-    }
-  }, []);
-
   let handleImageUpload = () => {
     setShow(!show);
   };
