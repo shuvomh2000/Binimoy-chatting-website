@@ -41,7 +41,7 @@ const Chat = () => {
                 placeholder="type a message..."
                 className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
               />
-              <button className="bg-primary text-white w-[45px] h-[33px] rounded font-normal text-xl  capitalize flex justify-center items-center">
+              <button className="bg-primary text-white w-[60px] h-[33px] rounded font-normal text-xl  capitalize flex justify-center items-center">
                 <IoMdSend />
               </button>
             </div>
