@@ -1,7 +1,12 @@
 import React from "react";
 import { IoMdSend } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const Chat = () => {
+
+  let data =useSelector(state=>state.activeChat.value)
+
+  console.log(data)
   return (
     <>
       <div className="relative">
@@ -17,7 +22,7 @@ const Chat = () => {
               <div>
                 <h4 className="font-poppins text-black text-sm font-semibold capitalize">
                   {/* {item.sender_name} */}
-                  vdsv
+                  {data.name}
                 </h4>
                 <p className="font-poppins text-msg text-sm font-normal">
                   online

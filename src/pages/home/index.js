@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import {useNavigate, NavLink} from 'react-router-dom'
+import { getAuth } from "firebase/auth";
 import BlockedUser from '../../components/BlockedUser'
 import FriendRequest from '../../components/FriendRequest'
 import Friends from '../../components/Friends'
@@ -8,19 +9,26 @@ import Groups from '../../components/Groups'
 import Search from '../../components/Search'
 import Sidebar from '../../components/Sidebar'
 import UserList from '../../components/UserList'
-import { getAuth } from "firebase/auth";
+import { useSelector } from 'react-redux';
 
 
 const Home = () => {
   const auth = getAuth();
   const navigate = useNavigate()
-
+  // const data = useSelector(state=>state.activeChat.value)
+  // console.log(data)
   
-useEffect(()=>{
-  if(!auth.currentUser){
-    navigate("/login")
-  }
-},[])
+  // useEffect(()=>{
+  //   if(data == null){
+  //     navigate("/login")
+  //   }
+  // },[])
+  
+  useEffect(()=>{
+    if(!auth.currentUser){
+      navigate("/login")
+    }
+  },[])
   
 
   return (

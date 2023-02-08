@@ -10,7 +10,6 @@ import Register from "./pages/register";
 import RootLayout from "./route/RootLayout";
 
 
-
 const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<RootLayout/>}>
       <Route index element={<Home/>}></Route>

@@ -12,11 +12,14 @@ import {
 import { getAuth } from "firebase/auth";
 import Friends from "../Friends";
 import Chat from "../Chat";
+import { activeChat } from "../../slices/ActiveChatSlice";
+import { useDispatch } from "react-redux";
 
 const Message = () => {
   const db = getDatabase();
   const auth = getAuth();
-
+  const dispatch = useDispatch();
+  
   let [mygrp, setMygrp] = useState([]);
   let [grpmember, setGrpMember] = useState([]);
 
@@ -46,6 +49,17 @@ const Message = () => {
     });
   }, []);
 
+  let handleSend = (item) => {
+    let userInfo = {
+      status : "group",
+      id : item.id,
+      name : item.groupName
+    };
+    
+    dispatch(activeChat(userInfo))
+  };
+
+
   return (
     <div className="flex justify-between">
       <div className="w-[14%]">
@@ -54,8 +68,10 @@ const Message = () => {
       <div className="w-[84%] flex justify-between">
         <div className="w-[30%] h-screen flex flex-wrap">
           <div className="w-full">
+            {/*  */}
             <Search />
             <Friends btn={true} />
+            {/*  */}
             {/* <div className="shadow-md mt-[30px] p-[20px] rounded-[20px]">
               <div className="max-h-[295px] overflow-y-auto">
               </div>
@@ -77,7 +93,7 @@ const Message = () => {
                   <div>
                     <div className=" overflow-y-auto max-h-[380px]">
                       {/*  */}
-                      <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
+                      <div onClick={()=>handleSend(item)} className="flex justify-between py-[10px] border-b border-solid last:border-0">
                         <div className="flex">
                           <div className="w-[55px] h-[55px] rounded-[50%]">
                             <picture>
@@ -99,7 +115,7 @@ const Message = () => {
                   <div>
                     <div className=" overflow-y-auto max-h-[380px]">
                       {/*  */}
-                      <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
+                      <div onClick={()=>handleSend(item)} className="flex justify-between py-[10px] border-b border-solid last:border-0">
                         <div className="flex">
                           <div className="w-[55px] h-[55px] rounded-[50%]">
                             <picture>
@@ -127,8 +143,7 @@ const Message = () => {
         <div className="w-[67%] shadow-xl border border-solid h-screen p-[30px]">
           <div>
             <div>
-
-              <Chat/>
+              <Chat />
             </div>
           </div>
         </div>

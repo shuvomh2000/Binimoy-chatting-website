@@ -8,10 +8,13 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { activeChat } from "../slices/ActiveChatSlice";
+import { useDispatch } from "react-redux";
 
 const Friends = (props) => {
   const db = getDatabase();
   const auth = getAuth();
+  const dispatch = useDispatch();
 
   let [friendRequests, setFriendRequests] = useState([]);
 
@@ -43,6 +46,22 @@ const Friends = (props) => {
     });
   };
 
+  let handleSend = (item) => {
+    let userInfo = {};
+
+    if (item.acceptId == auth.currentUser.uid) {
+      userInfo.status = "single";
+      userInfo.id = item.senderId;
+      userInfo.name = item.sendername;
+    } else {
+      userInfo.status = "single";
+      userInfo.id = item.acceptId;
+      userInfo.name = item.acceptname;
+    }
+
+    dispatch(activeChat(userInfo))
+  };
+
   return (
     <div className="shadow-md mt-[30px] p-[20px] rounded-[20px]">
       <div>
@@ -56,7 +75,10 @@ const Friends = (props) => {
         <div className=" overflow-y-auto max-h-[295px]">
           {/*  */}
           {friendRequests.map((item) => (
-            <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
+            <div
+              onClick={() => handleSend(item)}
+              className="flex justify-between py-[10px] border-b border-solid last:border-0"
+            >
               <div className="flex">
                 <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
                   <picture>

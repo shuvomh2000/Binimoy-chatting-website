@@ -21,7 +21,6 @@ const Sidebar = ({ active }) => {
   const storage = getStorage();
   const auth = getAuth();
   const navigate = useNavigate();
-  let currentUser = auth.currentUser;
 
   let [loading, setLoading] = useState(false);
   let [show, setShow] = useState(false);
@@ -30,6 +29,12 @@ const Sidebar = ({ active }) => {
   const [image, setImage] = useState();
   const [imgName, setImgName] = useState("");
   const [cropper, setCropper] = useState();
+
+  useEffect(()=>{
+    if(!auth.currentUser.photoURL){
+      navigate("/login")
+    }
+  },[])
 
   let handleImageUpload = () => {
     setShow(!show);
@@ -87,8 +92,8 @@ const Sidebar = ({ active }) => {
               <img
                 className="object-cover"
                 // src="images/user.jpg"
-                // src="images/user2.png"
-                src={currentUser.photoURL}
+                src="images/user2.png"
+                // src={auth.currentUser.photoURL}
                 loading="lazy"
               />
             </picture>
@@ -102,8 +107,8 @@ const Sidebar = ({ active }) => {
 
           {/* {curentUser.displayName} */}
           <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px]">
-            {/* cndkjsvn */}
-            {currentUser.displayName}
+            shuvo
+            {/* {auth.currentUser.displayName} */}
           </h3>
           <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
             <NavLink to="/">
