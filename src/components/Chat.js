@@ -1,12 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { IoMdSend } from "react-icons/io";
 import { useSelector } from "react-redux";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
+import { getAuth } from "firebase/auth";
 
 const Chat = () => {
+  const db = getDatabase();
+  const auth = getAuth();
 
-  let data =useSelector(state=>state.activeChat.value)
+  let data = useSelector((state) => state.activeChat.value);
 
-  console.log(data)
+  let [msg, setMsg] = useState("");
+  let [allmsg, setAllmsg] = useState([]);
+
+  let handleMsg = (e) => {
+    setMsg(e.target.value);
+  };
+
+  let handleSend = () => {
+    if (msg == "") {
+      console.log("enter msg");
+    } else {
+      set(push(ref(db, "msg")), {
+        whosendid: auth.currentUser.uid,
+        whosendname: auth.currentUser.displayName,
+        whoreceieveid: data.id,
+        whoreceievename: data.name,
+        msg: msg,
+      }).then(() => {
+        setMsg("");
+      });
+    }
+  };
+
+  useEffect(() => {
+    const msgRef = ref(db, "msg/");
+    onValue(msgRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        if (
+          item.val().whosendid == auth.currentUser.uid &&
+          item.val().whoreceieveid == data.id ||
+          item.val().whoreceieveid == auth.currentUser.uid &&
+          item.val().whosendid == data.id 
+        ) {
+          arr.push({ ...item.val(), id: item.key });
+        }
+      });
+      setAllmsg(arr);
+    });
+  }, [data.id]);
+
   return (
     <>
       <div className="relative">
@@ -33,23 +84,33 @@ const Chat = () => {
         </div>
         {/*  */}
         <div className="w-full h-[70vh] overflow-y-auto px-[10px] my-[10px]">
-            <div className="flex flex-col gap-y-[15px]">
-              <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
-                Contrary
-              </div>
-              <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
-                Contrary
-              </div>
-            </div>
-            <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
-              <input
-                placeholder="type a message..."
-                className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
-              />
-              <button className="bg-primary text-white w-[60px] h-[33px] rounded font-normal text-xl  capitalize flex justify-center items-center">
-                <IoMdSend />
-              </button>
-            </div>
+          <div className="flex flex-col gap-y-[15px]">
+            {allmsg.map((item) =>
+              item.whosendid == auth.currentUser.uid &&
+              item.whoreceieveid == data.id? (
+                <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
+                  {item.msg}
+                </div>
+              ) : (
+                <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
+                    {item.msg}
+                </div>
+              )
+            )}
+          </div>
+          <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
+            <input
+              placeholder="type a message..."
+              className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
+              onChange={handleMsg}
+            />
+            <button
+              onClick={handleSend}
+              className="bg-primary text-white w-[60px] h-[33px] rounded font-normal text-xl  capitalize flex justify-center items-center"
+            >
+              <IoMdSend />
+            </button>
+          </div>
         </div>
       </div>
     </>

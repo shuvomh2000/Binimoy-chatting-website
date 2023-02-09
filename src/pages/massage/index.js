@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Search from "../Search";
-import Sidebar from "../Sidebar";
+// import Search from "../Search";
+import Search from '../../components/Search'
+// import Sidebar from "../Sidebar";
+import Sidebar from '../../components/Sidebar'
 import {
   getDatabase,
   ref,
@@ -10,8 +12,10 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import Friends from "../Friends";
-import Chat from "../Chat";
+// import Friends from "../Friends";
+import Friends from "../../components/Friends"
+import Chat from "../../components/Chat"
+// import { activeChat } from "../../slices/ActiveChatSlice";
 import { activeChat } from "../../slices/ActiveChatSlice";
 import { useDispatch } from "react-redux";
 
@@ -19,7 +23,7 @@ const Message = () => {
   const db = getDatabase();
   const auth = getAuth();
   const dispatch = useDispatch();
-  
+
   let [mygrp, setMygrp] = useState([]);
   let [grpmember, setGrpMember] = useState([]);
 
@@ -51,14 +55,13 @@ const Message = () => {
 
   let handleSend = (item) => {
     let userInfo = {
-      status : "group",
-      id : item.id,
-      name : item.groupName
+      status: "group",
+      id: item.id,
+      name: item.groupName,
     };
-    
-    dispatch(activeChat(userInfo))
-  };
 
+    dispatch(activeChat(userInfo));
+  };
 
   return (
     <div className="flex justify-between">
@@ -93,7 +96,10 @@ const Message = () => {
                   <div>
                     <div className=" overflow-y-auto max-h-[380px]">
                       {/*  */}
-                      <div onClick={()=>handleSend(item)} className="flex justify-between py-[10px] border-b border-solid last:border-0">
+                      <div
+                        onClick={() => handleSend(item)}
+                        className="flex justify-between py-[10px] border-b border-solid last:border-0"
+                      >
                         <div className="flex">
                           <div className="w-[55px] h-[55px] rounded-[50%]">
                             <picture>
@@ -115,7 +121,10 @@ const Message = () => {
                   <div>
                     <div className=" overflow-y-auto max-h-[380px]">
                       {/*  */}
-                      <div onClick={()=>handleSend(item)} className="flex justify-between py-[10px] border-b border-solid last:border-0">
+                      <div
+                        onClick={() => handleSend(item)}
+                        className="flex justify-between py-[10px] border-b border-solid last:border-0"
+                      >
                         <div className="flex">
                           <div className="w-[55px] h-[55px] rounded-[50%]">
                             <picture>

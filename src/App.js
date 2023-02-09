@@ -1,6 +1,6 @@
 
 import { RouterProvider,createBrowserRouter,createRoutesFromElements,Route } from "react-router-dom";
-import Message from "./components/message";
+import Message from "./pages/massage";
 import Notification from "./components/notification";
 import Setting from "./components/setting";
 import ForgetPassword from "./pages/forgetPassword";

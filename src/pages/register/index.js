@@ -178,24 +178,7 @@ const Register = () => {
             <p className="font-nunito text-center text-heading text-sm font-normal mb-[20px]">
               Get started with easily register
             </p>
-            <div className="relative">
-              <input
-                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
-                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
-                type="email"
-                placeholder="Email Adress"
-                onChange={handleEmail}
-              />
-              {emailerr ? (
-                <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
-                  <h3 className="text-white font-normal font-poppins text-sm">
-                    {emailerr}
-                  </h3>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
+
             <div className="relative">
               <input
                 className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
@@ -208,6 +191,24 @@ const Register = () => {
                 <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
                   <h3 className="text-white font-normal font-poppins text-sm">
                     {nameerr}
+                  </h3>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+            <div className="relative">
+              <input
+                className="w-full border-b-2 border-[#e7e7e7] text-[20px] font-medium font-poppins text-heading  
+                placeholder:text-sm placeholder:font-normal placeholder:text-heading placeholder:font-nunito pb-[10px] mb-[20px]"
+                type="email"
+                placeholder="Email Adress"
+                onChange={handleEmail}
+              />
+              {emailerr ? (
+                <div className="bg-red px-[5px] py-[2px] rounded mt-[-25px] absolute left-0 bottom-0 w-full">
+                  <h3 className="text-white font-normal font-poppins text-sm">
+                    {emailerr}
                   </h3>
                 </div>
               ) : (

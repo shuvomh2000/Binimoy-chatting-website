@@ -106,7 +106,7 @@ const Sidebar = ({ active }) => {
           </div>
 
           {/* {curentUser.displayName} */}
-          <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px]">
+          <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
             shuvo
             {/* {auth.currentUser.displayName} */}
           </h3>
@@ -177,10 +177,24 @@ const Sidebar = ({ active }) => {
                 />
               </li>
             </NavLink>
+            <NavLink to="/login">
+              <li
+                className=
+                  "xl:py-[25px] relative z-10 xl:after:absolute xl:after:content-[''] xl:after:bg-white xl:after:top-0 xl:left-0 xl:xl:after:left-[-45px] xl:after:w-[155px] xl:after:h-full xl:after:z-[-1] xl:after:rounded-tl-[20px] xl:after:rounded-bl-[20px] xl:before:absolute xl:before:content-[''] xl:before:bg-primary xl:before:top-0 xl:before:right-[-84px] xl:before:w-[9px] xl:before:h-full xl:before:rounded-[20px]  after:absolute after:content-[''] after:w-[45px] after:h-[45px] after:bg-white after:top-[-8px] after:left-[-10px]  after:z-[-1] after:rounded-[50%] xl:after:rounded-[0%]"
+              >
+                <FiLogOut
+                  className={`${
+                    active == "setting"
+                      ? "text-[25px] xl:text-[30px] text-primary"
+                      : "text-[25px] xl:text-[30px] text-white my-[25px]"
+                  }`}
+                />
+              </li>
+            </NavLink>
           </ul>
-          <div className="xl:mt-[50px] flex justify-center items-center">
+          {/* <div className="xl:mt-[50px] flex justify-center items-center">
             <FiLogOut className="text-[30px] text-white" />
-          </div>
+          </div> */}
         </div>
       </div>
 
