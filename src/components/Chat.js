@@ -9,7 +9,14 @@ import {
   push,
   remove,
 } from "firebase/database";
+import {
+  getStorage,
+  ref as Sref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import { getAuth } from "firebase/auth";
+const storage = getStorage();
 
 const Chat = () => {
   const db = getDatabase();
@@ -18,6 +25,7 @@ const Chat = () => {
   let data = useSelector((state) => state.activeChat.value);
 
   let [msg, setMsg] = useState("");
+  let [img, setImg] = useState("");
   let [singlemsg, setSinglemsg] = useState([]);
   let [groupmsg, setGroupmsg] = useState([]);
 
@@ -25,17 +33,22 @@ const Chat = () => {
     setMsg(e.target.value);
   };
 
+  let handleImg = (e) => {
+    setImg(e.target.files[0]);
+  };
+
   let handleSend = () => {
     if (msg == "") {
       console.log("enter msg");
-    }else if(data.status == "group"){
+    } else if (data.status == "group") {
       set(push(ref(db, "groupmsg")), {
         whosendid: auth.currentUser.uid,
         whosendname: auth.currentUser.displayName,
         gwhoreceieveid: data.id,
         gwhoreceievename: data.name,
         msg: msg,
-      })
+        type: "text",
+      });
     } else {
       set(push(ref(db, "singlemsg")), {
         whosendid: auth.currentUser.uid,
@@ -43,7 +56,56 @@ const Chat = () => {
         whoreceieveid: data.id,
         whoreceievename: data.name,
         msg: msg,
-      })
+        type: "text",
+      });
+    }
+    if (img == "") {
+      console.log("select image");
+    } else {
+      const singleImgRef = Sref(storage, "singleImg/" + img.name);
+
+      const uploadTask = uploadBytesResumable(singleImgRef, img);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case "paused":
+              console.log("Upload is paused");
+              break;
+            case "running":
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {},
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            if (data.status == "gruop") {
+              set(push(ref(db, "groupmsg")), {
+                whosendid: auth.currentUser.uid,
+                whosendname: auth.currentUser.displayName,
+                whoreceieveid: data.id,
+                whoreceievename: data.name,
+                img: downloadURL,
+                type: "image",
+              });
+            } else {
+              set(push(ref(db, "singlemsg")), {
+                whosendid: auth.currentUser.uid,
+                whosendname: auth.currentUser.displayName,
+                whoreceieveid: data.id,
+                whoreceievename: data.name,
+                img: downloadURL,
+                type: "image",
+              });
+            }
+          });
+        }
+      );
     }
   };
 
@@ -52,14 +114,7 @@ const Chat = () => {
     onValue(groupmsgRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        console.log(item.val())
-        if (
-          item.val().whosendid == auth.currentUser.uid &&
-          item.val().gwhoreceieveid == data.id 
-          // ||
-          // item.val().gwhoreceieveid == auth.currentUser.uid &&
-          // item.val().whosendid == data.id 
-        ) {
+        if (item.val().gwhoreceieveid == data.id) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
@@ -73,19 +128,18 @@ const Chat = () => {
       let arr = [];
       snapshot.forEach((item) => {
         if (
-          item.val().whosendid == auth.currentUser.uid &&
-          item.val().whoreceieveid == data.id ||
-          item.val().whoreceieveid == auth.currentUser.uid &&
-          item.val().whoreceieveid == data.id 
+          (item.val().whosendid == auth.currentUser.uid &&
+            item.val().whoreceieveid == data.id) ||
+          (item.val().whoreceieveid == auth.currentUser.uid &&
+            item.val().whosendid == data.id)
         ) {
           arr.push({ ...item.val(), id: item.key });
+          console.log(item.val());
         }
       });
       setSinglemsg(arr);
     });
   }, [data.id]);
-
-
 
   return (
     <>
@@ -114,36 +168,62 @@ const Chat = () => {
         {/*  */}
         <div className="w-full h-[70vh] overflow-y-auto px-[10px] my-[10px]">
           <div className="flex flex-col gap-y-[15px]">
-            {groupmsg.map((item) =>
-              item.whosendid == auth.currentUser.uid &&
-              item.gwhoreceieveid == data.id? (
-                <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
-                  {item.msg}
-                </div>
-              ) : (
-                <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
-                    {item.msg}
-                </div>
-              )
-            )}
-            {singlemsg.map((item) =>
-              item.whosendid == auth.currentUser.uid &&
-              item.whoreceieveid == data.id? (
-                <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
-                  {item.msg}
-                </div>
-              ) : (
-                <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
-                    {item.msg}
-                </div>
-              )
-            )}
+            {data.status == "group"
+              ? groupmsg.map((item) =>
+                  item.whosendid == auth.currentUser.uid &&
+                  item.gwhoreceieveid == data.id
+                    ? (item.type = "text" ? (
+                        <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
+                          {item.msg}
+                        </div>
+                      ) : (
+                        <div className="p-[10px]  text-white text-base font-extralight font-poppins max-w-[60%] ml-auto rounded-lg">
+                          <img src="images/demu11.jpg" />
+                        </div>
+                      ))
+                    : (item.type = "text" ? (
+                        <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
+                          {item.msg}
+                        </div>
+                      ) : (
+                        <div className="p-[10px]  font-normal text-base font-poppins max-w-[60%] mr-auto rounded-lg">
+                          <img src="images/demu11.jpg" />
+                        </div>
+                      ))
+                )
+              : singlemsg.map((item) =>
+                  item.whosendid == auth.currentUser.uid &&
+                  item.whoreceieveid == data.id ? (
+                    item.type == "text" ? (
+                      <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
+                        {item.msg}
+                      </div>
+                    ) : (
+                      <div className="p-[10px]  text-white text-base font-extralight font-poppins max-w-[60%] ml-auto rounded-lg">
+                        <img src={item.img} />
+                      </div>
+                    )
+                  ) : item.type == "text" ? (
+                    <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
+                      {item.msg}
+                    </div>
+                  ) : (
+                    <div className="p-[10px]  font-normal text-base font-poppins max-w-[60%] mr-auto rounded-lg">
+                      <img src={item.img} />
+                    </div>
+                  )
+                )}
           </div>
           <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
             <input
               placeholder="type a message..."
               className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
               onChange={handleMsg}
+            />
+            <input
+              className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
+              type="file"
+              onChange={handleImg}
             />
             <button
               onClick={handleSend}

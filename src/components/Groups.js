@@ -136,6 +136,10 @@ const Groups = () => {
       remove(ref(db, "groupJoinRequest/" + item.id));
     });
   };
+
+  let handleLeave = (item)=>{
+    remove(ref(db, "groupmembers/" + item.id));
+  }
   return (
     <>
       <div className="shadow-md p-[20px] rounded-[20px]">
@@ -323,7 +327,7 @@ const Groups = () => {
                  {grpmember.map((item)=>(
                   <div className="group flex justify-between py-[10px] border-b border-solid last:border-0">
                     <div className="flex">
-                      <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
+                      <div className="w-[25px] h-[25px] rounded-[50%] overflow-hidden">
                         <picture>
                           <img src={item.userProfile} />
                         </picture>
@@ -335,7 +339,7 @@ const Groups = () => {
                       </div>
                     </div>
                     <div className="flex gap-x-[10px]  items-center">
-                      <button
+                      <button onClick={()=>handleLeave(item)}
                         className="hidden group-hover:block ease-in-out text-red w-[25px] h-[25px] rounded font-normal text-xl  capitalize flex justify-center items-center"
                       >
                         <BiExit />

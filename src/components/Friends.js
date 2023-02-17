@@ -30,6 +30,18 @@ const Friends = (props) => {
           arr.unshift({ ...item.val(), id: item.key });
         }
       });
+      let userInfo = {};
+      if (arr[0].acceptId == auth.currentUser.uid) {
+        userInfo.status = "single";
+        userInfo.id = arr[0].senderId;
+        userInfo.name = arr[0].sendername;
+      } else {
+        userInfo.status = "single";
+        userInfo.id = arr[0].acceptId;
+        userInfo.name = arr[0].acceptname;
+      }
+  
+      dispatch(activeChat(userInfo))
       setFriendRequests(arr);
     });
   }, []);
