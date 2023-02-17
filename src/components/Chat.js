@@ -16,9 +16,11 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-const storage = getStorage();
+import {ImAttachment} from "react-icons/im"
+
 
 const Chat = () => {
+  const storage = getStorage();                
   const db = getDatabase();
   const auth = getAuth();
 
@@ -177,16 +179,18 @@ const Chat = () => {
                           {item.msg}
                         </div>
                       ) : (
-                        <div className="p-[10px]  text-white text-base font-extralight font-poppins max-w-[60%] ml-auto rounded-lg">
+                        <div className="max-w-[60%] ml-auto ">
                           <img src="images/demu11.jpg" />
                         </div>
                       ))
                     : (item.type = "text" ? (
-                        <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
-                          {item.msg}
+                        <div className=" max-w-[70%] mr-auto">
+                          <h6 className="font-normal text-[10px] font-poppins">{item.whosendname}</h6>
+                          <h6 className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins rounded-lg">{item.msg}</h6>
                         </div>
                       ) : (
-                        <div className="p-[10px]  font-normal text-base font-poppins max-w-[60%] mr-auto rounded-lg">
+                        <div className="max-w-[60%] mr-auto ">
+                           <h6 className="font-normal text-[10px] font-poppins">{item.whosendname}</h6>
                           <img src="images/demu11.jpg" />
                         </div>
                       ))
@@ -217,13 +221,17 @@ const Chat = () => {
           <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
             <input
               placeholder="type a message..."
-              className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
+              className="w-[90%] bg-[#D9D9D9] rounded-md pl-[10px] pr-[40px] py-[5px]"
               onChange={handleMsg}
             />
+            <label for="file">
+              <ImAttachment className="absolute top-0 right-[12%] top-[50%] translate-y-[-50%] text-primary"/>
+            </label>
             <input
-              className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px]"
+              className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px] hidden"
               type="file"
               onChange={handleImg}
+              id="file"
             />
             <button
               onClick={handleSend}
