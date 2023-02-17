@@ -120,7 +120,7 @@ const UserList = () => {
                 {friendlist.includes(item.id + auth.currentUser.uid) ||
                 friendlist.includes(auth.currentUser.uid + item.id) ? (
                   <button
-                    className="bg-primary text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                    className="bg-[#907c98] text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
                   >
                     friend
                   </button>

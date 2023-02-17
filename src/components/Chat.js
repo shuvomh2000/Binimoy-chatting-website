@@ -18,7 +18,8 @@ const Chat = () => {
   let data = useSelector((state) => state.activeChat.value);
 
   let [msg, setMsg] = useState("");
-  let [allmsg, setAllmsg] = useState([]);
+  let [singlemsg, setSinglemsg] = useState([]);
+  let [groupmsg, setGroupmsg] = useState([]);
 
   let handleMsg = (e) => {
     setMsg(e.target.value);
@@ -27,36 +28,64 @@ const Chat = () => {
   let handleSend = () => {
     if (msg == "") {
       console.log("enter msg");
+    }else if(data.status == "group"){
+      set(push(ref(db, "groupmsg")), {
+        whosendid: auth.currentUser.uid,
+        whosendname: auth.currentUser.displayName,
+        gwhoreceieveid: data.id,
+        gwhoreceievename: data.name,
+        msg: msg,
+      })
     } else {
-      set(push(ref(db, "msg")), {
+      set(push(ref(db, "singlemsg")), {
         whosendid: auth.currentUser.uid,
         whosendname: auth.currentUser.displayName,
         whoreceieveid: data.id,
         whoreceievename: data.name,
         msg: msg,
-      }).then(() => {
-        setMsg("");
-      });
+      })
     }
   };
 
   useEffect(() => {
-    const msgRef = ref(db, "msg/");
-    onValue(msgRef, (snapshot) => {
+    const groupmsgRef = ref(db, "groupmsg/");
+    onValue(groupmsgRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        console.log(item.val())
+        if (
+          item.val().whosendid == auth.currentUser.uid &&
+          item.val().gwhoreceieveid == data.id 
+          // ||
+          // item.val().gwhoreceieveid == auth.currentUser.uid &&
+          // item.val().whosendid == data.id 
+        ) {
+          arr.push({ ...item.val(), id: item.key });
+        }
+      });
+      setGroupmsg(arr);
+    });
+  }, [data.id]);
+
+  useEffect(() => {
+    const singlemsgRef = ref(db, "singlemsg/");
+    onValue(singlemsgRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
         if (
           item.val().whosendid == auth.currentUser.uid &&
           item.val().whoreceieveid == data.id ||
           item.val().whoreceieveid == auth.currentUser.uid &&
-          item.val().whosendid == data.id 
+          item.val().whoreceieveid == data.id 
         ) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
-      setAllmsg(arr);
+      setSinglemsg(arr);
     });
   }, [data.id]);
+
+
 
   return (
     <>
@@ -85,7 +114,19 @@ const Chat = () => {
         {/*  */}
         <div className="w-full h-[70vh] overflow-y-auto px-[10px] my-[10px]">
           <div className="flex flex-col gap-y-[15px]">
-            {allmsg.map((item) =>
+            {groupmsg.map((item) =>
+              item.whosendid == auth.currentUser.uid &&
+              item.gwhoreceieveid == data.id? (
+                <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">
+                  {item.msg}
+                </div>
+              ) : (
+                <div className="p-[10px] bg-[#D9D9D9] font-normal text-base font-poppins max-w-[70%] mr-auto rounded-lg">
+                    {item.msg}
+                </div>
+              )
+            )}
+            {singlemsg.map((item) =>
               item.whosendid == auth.currentUser.uid &&
               item.whoreceieveid == data.id? (
                 <div className="p-[10px] bg-primary text-white text-base font-extralight font-poppins max-w-[70%] ml-auto rounded-lg">

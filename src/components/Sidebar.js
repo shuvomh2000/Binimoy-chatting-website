@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { getAuth,updateProfile } from "firebase/auth";
+import { getAuth, updateProfile,signOut } from "firebase/auth";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { FiLogOut} from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 import { CiImageOn } from "react-icons/ci";
 import { TailSpin } from "react-loader-spinner";
 import {
@@ -25,16 +25,15 @@ const Sidebar = ({ active }) => {
   let [loading, setLoading] = useState(false);
   let [show, setShow] = useState(false);
 
-
   const [image, setImage] = useState();
   const [imgName, setImgName] = useState("");
   const [cropper, setCropper] = useState();
 
-  useEffect(()=>{
-    if(!auth.currentUser.photoURL){
-      navigate("/login")
+  useEffect(() => {
+    if (!auth.currentUser.photoURL) {
+      navigate("/login");
     }
-  },[])
+  }, []);
 
   let handleImageUpload = () => {
     setShow(!show);
@@ -57,7 +56,7 @@ const Sidebar = ({ active }) => {
   };
 
   const getCropData = () => {
-    setLoading(true)
+    setLoading(true);
     if (typeof cropper !== "undefined") {
       const storageRef = ref(storage, imgName);
       // setCropData();
@@ -68,20 +67,28 @@ const Sidebar = ({ active }) => {
             photoURL: downloadURL,
           })
             .then(() => {
-              console.log("profile picture upload")
-              setCropper('')
-              setImgName('')
-              setImage('')
-              setLoading(false)
-              setShow(false)
+              console.log("profile picture upload");
+              setCropper("");
+              setImgName("");
+              setImage("");
+              setLoading(false);
+              setShow(false);
             })
             .catch((error) => {
-              console.log(error)
+              console.log(error);
             });
         });
       });
     }
   };
+
+  let handleLogout = ()=>{
+    signOut(auth).then(() => {
+      navigate("/login")
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
 
   return (
     <>
@@ -107,8 +114,8 @@ const Sidebar = ({ active }) => {
 
           {/* {curentUser.displayName} */}
           <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
-            shuvo
-            {/* {auth.currentUser.displayName} */}
+            {/* shuvo */}
+            {auth.currentUser.displayName}
           </h3>
           <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
             <NavLink to="/">
@@ -177,20 +184,9 @@ const Sidebar = ({ active }) => {
                 />
               </li>
             </NavLink>
-            <NavLink to="/login">
-              <li
-                className=
-                  "xl:py-[25px] relative z-10 xl:after:absolute xl:after:content-[''] xl:after:bg-white xl:after:top-0 xl:left-0 xl:xl:after:left-[-45px] xl:after:w-[155px] xl:after:h-full xl:after:z-[-1] xl:after:rounded-tl-[20px] xl:after:rounded-bl-[20px] xl:before:absolute xl:before:content-[''] xl:before:bg-primary xl:before:top-0 xl:before:right-[-84px] xl:before:w-[9px] xl:before:h-full xl:before:rounded-[20px]  after:absolute after:content-[''] after:w-[45px] after:h-[45px] after:bg-white after:top-[-8px] after:left-[-10px]  after:z-[-1] after:rounded-[50%] xl:after:rounded-[0%]"
-              >
-                <FiLogOut
-                  className={`${
-                    active == "setting"
-                      ? "text-[25px] xl:text-[30px] text-primary"
-                      : "text-[25px] xl:text-[30px] text-white my-[25px]"
-                  }`}
-                />
+              <li onClick={handleLogout} className="cursor-pointer">
+                <FiLogOut className="text-[30px] text-white my-[25px]" />
               </li>
-            </NavLink>
           </ul>
           {/* <div className="xl:mt-[50px] flex justify-center items-center">
             <FiLogOut className="text-[30px] text-white" />

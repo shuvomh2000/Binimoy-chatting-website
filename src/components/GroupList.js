@@ -24,7 +24,7 @@ const GroupList = () => {
     onValue(groupsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().admin !== auth.currentUser.uid) {
+        if (item.val().adminid !== auth.currentUser.uid) {
           arr.unshift({ ...item.val(), id: item.key });
         }
       });
@@ -70,7 +70,7 @@ const GroupList = () => {
 
   let handleGroupJoinRequest = (item) => {
     set(push(ref(db, "groupJoinRequest")), {
-      adminid: item.admin,
+      adminid: item.adminid,
       adminName: item.adminName,
       gid: item.id,
       gname: item.groupName,

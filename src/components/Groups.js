@@ -21,6 +21,7 @@ const Groups = () => {
   let [show, setShow] = useState(false);
   let [groupusershow, setGroupUserShow] = useState(false);
   let [grp, setGrp] = useState([]);
+  let [joingrp, setJoingrp] = useState([]);
   let [grpmember, setGrpMember] = useState([]);
   let [grpmemberreq, setGrpMemberReq] = useState([]);
   let [grpname, setGrpname] = useState("");
@@ -32,7 +33,7 @@ const Groups = () => {
     onValue(groupsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().admin == auth.currentUser.uid
+        if (item.val().adminid == auth.currentUser.uid
         ) {
           arr.unshift({ ...item.val(), id: item.key });
         }
@@ -41,9 +42,20 @@ const Groups = () => {
     });
   }, []);
 
-  // useEffect(() => {
-    
-  // }, []);
+  useEffect(() => {
+    const groupmembersRef = ref(db, "groupmembers/");
+    onValue(groupmembersRef, (snapshot) => {
+      let arr = [];
+      snapshot.forEach((item) => {
+        // console.log(item.val())
+        if (item.val().userid == auth.currentUser.uid 
+        ) {
+          arr.unshift({ ...item.val(), id: item.key });
+        }
+      });
+      setJoingrp(arr);
+    });
+  }, []);
 
   let handleModal = () => {
     setShow(!show);
@@ -61,7 +73,7 @@ const Groups = () => {
       set(push(ref(db, "groups")), {
         groupName: grpname,
         groupTag: grpbio,
-        admin: auth.currentUser.uid,
+        adminid: auth.currentUser.uid,
         adminName: auth.currentUser.displayName,
         date: `${new Date().getDate()}/${
           new Date().getMonth() + 1
@@ -95,8 +107,6 @@ const Groups = () => {
     onValue(groupmembersRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((gitem) => {
-        // console.log("glist", gitem.val().gid )
-        // console.log("item", item.id)
         if (auth.currentUser.uid !== gitem.val().userid 
         && gitem.val().gid == item.id
         ) {
@@ -178,6 +188,27 @@ const Groups = () => {
                 </div>
               </div>
             ))}
+            {joingrp.map((item) => (
+              <div className="group duration-300 flex justify-between py-[10px] border-b border-solid last:border-0">
+                <div className="flex">
+                  <div className="w-[55px] h-[55px] rounded-[50%]">
+                    <picture>
+                      <img src="images/user1.png" />
+                    </picture>
+                  </div>
+                  <div className="ml-[10px] mt-[7px]">
+                    <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                      {item.gName}
+                    </h4>
+                    <p className="font-poppins text-msg text-sm font-normal">
+                      admin:{item.adminName}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* another */}
             {/*  */}
           </div>
         </div>

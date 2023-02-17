@@ -12,10 +12,8 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
-// import Friends from "../Friends";
 import Friends from "../../components/Friends"
 import Chat from "../../components/Chat"
-// import { activeChat } from "../../slices/ActiveChatSlice";
 import { activeChat } from "../../slices/ActiveChatSlice";
 import { useDispatch } from "react-redux";
 
@@ -32,7 +30,7 @@ const Message = () => {
     onValue(friendRequestsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().admin == auth.currentUser.uid) {
+        if (item.val().adminid == auth.currentUser.uid) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
@@ -45,7 +43,7 @@ const Message = () => {
     onValue(friendRequestsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().userid == auth.currentUser.uid) {
+        if (item.val().userid == auth.currentUser.uid ) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
@@ -54,12 +52,16 @@ const Message = () => {
   }, []);
 
   let handleSend = (item) => {
-    let userInfo = {
-      status: "group",
-      id: item.id,
-      name: item.groupName,
-    };
-
+    let userInfo = {};
+    if (item.adminid == auth.currentUser.uid) {
+      userInfo.status = "group";
+      userInfo.id = item.id;
+      userInfo.name = item.groupName;
+    } else {
+      userInfo.status = "group";
+      userInfo.id = item.gid;
+      userInfo.name = item.gName;
+    }
     dispatch(activeChat(userInfo));
   };
 
@@ -85,7 +87,7 @@ const Message = () => {
               <div className="max-h-[295px] overflow-y-auto">
                 <div className="flex justify-between ">
                   <h3 className="font-poppins text-black text-xl font-semibold capitalize">
-                    my groups
+                    groups
                     {/* <span className="font-normal text-[16px]">
                       ({grp.length})
                     </span> */}
@@ -135,9 +137,6 @@ const Message = () => {
                             <h4 className="font-poppins text-black text-sm font-semibold capitalize">
                               {item.gName}
                             </h4>
-                            {/* <p className="font-poppins text-msg text-sm font-normal">
-                    Dinner
-                  </p> */}
                           </div>
                         </div>
                       </div>
