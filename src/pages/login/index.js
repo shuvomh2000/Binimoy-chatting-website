@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,10 +9,12 @@ import {
 import { TailSpin } from "react-loader-spinner";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../../slices/LoginUser";
 
 const Login = () => {
   const auth = getAuth();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
 
   let [email, setEmail] = useState("");
@@ -79,11 +81,12 @@ const Login = () => {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           setFerr("");
+        
           setLoading(false);
           setSuccess("login successfull");
-          setTimeout(()=>{
-            navigate("/")
-          },1500)
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -122,9 +125,9 @@ const Login = () => {
       });
   };
 
-  let handleImage = (e)=>{
-    console.log(e.target.files)
-  }
+  let handleImage = (e) => {
+    console.log(e.target.files);
+  };
 
   return (
     <div className="login">
@@ -230,13 +233,13 @@ const Login = () => {
             ) : (
               ""
             )}
-           <div className="text-center mt-[20px] cursor-pointer">
-           <NavLink to="/forgetpassword">
-              <h3 className="font-bold font-nunito text-sm text-primary capitalize">
-                forget password
-              </h3>
-            </NavLink>
-           </div>
+            <div className="text-center mt-[20px] cursor-pointer">
+              <NavLink to="/forgetpassword">
+                <h3 className="font-bold font-nunito text-sm text-primary capitalize">
+                  forget password
+                </h3>
+              </NavLink>
+            </div>
             <div className="text-center ">
               <button
                 className="p-[10px] rounded-[50px]  border text-[25px] mt-[10px]"

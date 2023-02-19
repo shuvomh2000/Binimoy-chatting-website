@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import { getAuth, updateProfile,signOut } from "firebase/auth";
+import { getAuth, updateProfile, signOut } from "firebase/auth";
 import { AiOutlineHome, AiOutlineSetting } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -13,6 +13,7 @@ import {
   uploadString,
   getDownloadURL,
 } from "firebase/storage";
+import { useSelector } from "react-redux";
 
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
@@ -21,6 +22,7 @@ const Sidebar = ({ active }) => {
   const storage = getStorage();
   const auth = getAuth();
   const navigate = useNavigate();
+  let user = useSelector((state) => state.loginUser.value);
 
   let [loading, setLoading] = useState(false);
   let [show, setShow] = useState(false);
@@ -30,7 +32,9 @@ const Sidebar = ({ active }) => {
   const [cropper, setCropper] = useState();
 
   useEffect(() => {
-    if (!auth.currentUser.photoURL) {
+    if (!user.photo) {
+      navigate("/login");
+    } else if (!user.photo) {
       navigate("/login");
     }
   }, []);
@@ -82,28 +86,31 @@ const Sidebar = ({ active }) => {
     }
   };
 
-  let handleLogout = ()=>{
-    signOut(auth).then(() => {
-      navigate("/login")
-    }).catch((error)=>{
-      console.log(error)
-    })
-  }
+  let handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
       <div className="w-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static">
         <div className="xl:pt-[38px] flex xl:block justify-center">
           <div className="relative group w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer">
-            <picture>
-              <img
-                className="object-cover"
-                // src="images/user.jpg"
-                src="images/user2.png"
-                // src={auth.currentUser.photoURL}
-                loading="lazy"
-              />
-            </picture>
+            {user && (
+              <picture>
+                <img
+                  className="object-cover"
+                  // src="images/user.jpg"
+                  src={user.photo}
+                  loading="lazy"
+                />
+              </picture>
+            )}
             <div
               onClick={handleImageUpload}
               className="w-[50px] hidden group-hover:block h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-bl_opacity xl:mx-auto my-auto absolute top-0 left-0"
@@ -113,10 +120,11 @@ const Sidebar = ({ active }) => {
           </div>
 
           {/* {curentUser.displayName} */}
+          {user &&
           <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
-            {/* shuvo */}
-            {auth.currentUser.displayName}
-          </h3>
+          {/* shuvo */}
+          {user.name}
+        </h3>}
           <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
             <NavLink to="/">
               <li
@@ -184,9 +192,9 @@ const Sidebar = ({ active }) => {
                 />
               </li>
             </NavLink>
-              <li onClick={handleLogout} className="cursor-pointer">
-                <FiLogOut className="text-[30px] text-white my-[25px]" />
-              </li>
+            <li onClick={handleLogout} className="cursor-pointer">
+              <FiLogOut className="text-[30px] text-white my-[25px]" />
+            </li>
           </ul>
           {/* <div className="xl:mt-[50px] flex justify-center items-center">
             <FiLogOut className="text-[30px] text-white" />

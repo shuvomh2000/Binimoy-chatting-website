@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import Search from "../Search";
 import Search from '../../components/Search'
-// import Sidebar from "../Sidebar";
 import Sidebar from '../../components/Sidebar'
 import {
   getDatabase,

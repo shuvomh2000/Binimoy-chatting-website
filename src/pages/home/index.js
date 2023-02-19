@@ -10,11 +10,15 @@ import Search from '../../components/Search'
 import Sidebar from '../../components/Sidebar'
 import UserList from '../../components/UserList'
 import { useSelector } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { LoginUser } from '../../slices/LoginUser';
 
 
 const Home = () => {
   const auth = getAuth();
   const navigate = useNavigate()
+  const dispatch = useDispatch();
+
   // const data = useSelector(state=>state.activeChat.value)
   // console.log(data)
   
@@ -27,6 +31,13 @@ const Home = () => {
   useEffect(()=>{
     if(!auth.currentUser){
       navigate("/login")
+    }else{
+      let loginuser = {
+        id: auth.currentUser.uid,
+        name: auth.currentUser.displayName,
+        photo: auth.currentUser.photoURL,
+      };
+        dispatch(LoginUser(loginuser));
     }
   },[])
   
