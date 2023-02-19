@@ -79,6 +79,7 @@ const Sidebar = ({ active }) => {
   let handleLogout = () => {
     signOut(auth)
       .then(() => {
+        localStorage.removeItem("loginInfo")
         navigate("/login");
       })
       .catch((error) => {

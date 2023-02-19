@@ -17,6 +17,7 @@ const Friends = (props) => {
   const dispatch = useDispatch();
 
   let [friendRequests, setFriendRequests] = useState([]);
+  let [show,setShow] = useState(false)
 
   useEffect(() => {
     const friendsRef = ref(db, "friends/");
@@ -104,8 +105,8 @@ const Friends = (props) => {
                       ? item.sendername
                       : item.acceptname}
                   </h4>
-                  {/* <p className="font-poppins text-msg text-sm font-normal">
-                {item.email}
+                  {/* <p onClick={()=>setShow(!show)} className={show ?" bg-black":" bg-primary"}>
+                cvxbnvn
               </p> */}
                 </div>
               </div>

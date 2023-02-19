@@ -10,6 +10,7 @@ import {
 import { getAuth } from "firebase/auth";
 import { RxCross2 } from "react-icons/rx";
 import { AiOutlineCheck } from "react-icons/ai";
+import DarkLight from "./DarkLight";
 
 const FriendRequest = () => {
   const db = getDatabase();
@@ -56,6 +57,7 @@ const FriendRequest = () => {
         </h3>
         <button>...</button>
       </div>
+      <DarkLight/>
       {friendRequests.map((item) => (
         <div>
           <div className=" overflow-y-auto max-h-[380px]">

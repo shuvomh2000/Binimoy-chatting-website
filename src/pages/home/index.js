@@ -11,25 +11,16 @@ import Sidebar from '../../components/Sidebar'
 import UserList from '../../components/UserList'
 import { useSelector } from 'react-redux';
 import { useDispatch } from "react-redux";
-import { LoginUser } from '../../slices/LoginUser';
 
 
 const Home = () => {
-  const auth = getAuth();
   const navigate = useNavigate()
-  const dispatch = useDispatch();
 
-  // const data = useSelector(state=>state.activeChat.value)
-  // console.log(data)
-  
-  // useEffect(()=>{
-  //   if(data == null){
-  //     navigate("/login")
-  //   }
-  // },[])
+  let user = useSelector((state) => state.loginUser.value);
+
   
   useEffect(()=>{
-    if(!auth.currentUser){
+    if(!user){
       navigate("/login")
     }
   },[])
