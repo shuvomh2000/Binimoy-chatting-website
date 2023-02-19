@@ -16,6 +16,7 @@ const Login = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const provider = new GoogleAuthProvider();
+  const dispatch = useDispatch();
 
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
@@ -79,9 +80,15 @@ const Login = () => {
     if (email && password && validEmail) {
       setLoading(true);
       signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then((user) => {
+          let loginuser = {
+            id: user.user.uid,
+            name: user.user.displayName,
+            photo: user.user.photoURL,
+          };
+          dispatch(LoginUser(loginuser));
+          localStorage.setItem('loginInfo', JSON.stringify(loginuser))
           setFerr("");
-        
           setLoading(false);
           setSuccess("login successfull");
           setTimeout(() => {

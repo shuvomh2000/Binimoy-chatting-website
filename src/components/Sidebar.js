@@ -31,20 +31,11 @@ const Sidebar = ({ active }) => {
   const [imgName, setImgName] = useState("");
   const [cropper, setCropper] = useState();
 
-  useEffect(() => {
-    if (!user.photo) {
-      navigate("/login");
-    } else if (!user.photo) {
-      navigate("/login");
-    }
-  }, []);
-
   let handleImageUpload = () => {
     setShow(!show);
   };
 
   let handleImage = (e) => {
-    // console.log(e.target)
     setImgName(e.target.files[0].name);
     let files;
     if (e.dataTransfer) {
@@ -63,7 +54,6 @@ const Sidebar = ({ active }) => {
     setLoading(true);
     if (typeof cropper !== "undefined") {
       const storageRef = ref(storage, imgName);
-      // setCropData();
       const message4 = cropper.getCroppedCanvas().toDataURL();
       uploadString(storageRef, message4, "data_url").then((snapshot) => {
         getDownloadURL(storageRef).then((downloadURL) => {
@@ -120,11 +110,12 @@ const Sidebar = ({ active }) => {
           </div>
 
           {/* {curentUser.displayName} */}
-          {user &&
-          <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
-          {/* shuvo */}
-          {user.name}
-        </h3>}
+          {user && (
+            <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
+            
+              {user.name}
+            </h3>
+          )}
           <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
             <NavLink to="/">
               <li

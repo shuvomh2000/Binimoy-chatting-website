@@ -31,13 +31,6 @@ const Home = () => {
   useEffect(()=>{
     if(!auth.currentUser){
       navigate("/login")
-    }else{
-      let loginuser = {
-        id: auth.currentUser.uid,
-        name: auth.currentUser.displayName,
-        photo: auth.currentUser.photoURL,
-      };
-        dispatch(LoginUser(loginuser));
     }
   },[])
   
