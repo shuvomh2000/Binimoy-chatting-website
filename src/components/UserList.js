@@ -8,10 +8,12 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
+import { useSelector } from "react-redux";
 
 const UserList = () => {
   const db = getDatabase();
   const auth = getAuth();
+  let dark = useSelector((state) => state.darkMode.value);
   let [userList, setUserList] = useState([]);
   let [friendrequestcheck, setFriendrequestcheck] = useState([]);
   let [friendRequests, setFriendRequests] = useState([]);
@@ -87,19 +89,19 @@ const UserList = () => {
   };
 
   return (
-    <div className="shadow-md p-[20px] rounded-[20px]">
+    <div className={`shadow-md p-[20px] rounded-[20px] ${!dark && "shadow-wh_opacity"}`}>
       <div>
         <div className="flex justify-between ">
-          <h3 className="font-poppins text-black text-xl font-semibold capitalize">
+          <h3 className={`font-poppins text-xl font-semibold capitalize ${dark?"text-black":"text-white"}`}>
             User List
           </h3>
-          <button>...</button>
+          <button  className={`${dark?"text-black":"text-white"}`}>...</button>
         </div>
 
         <div className=" overflow-y-auto max-h-[380px]">
           {/*  */}
           {userList.map((item) => (
-            <div className="flex justify-between py-[10px] border-b border-solid last:border-0">
+            <div className={`flex justify-between py-[10px] border-b border-solid last:border-0 ${!dark && "border-bl_opacity"}`}>
               <div className="flex">
                 <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
                   <picture>
@@ -108,7 +110,7 @@ const UserList = () => {
                   </picture>
                 </div>
                 <div className="ml-[10px] flex items-center">
-                  <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                  <h4 className={`font-poppins text-black text-sm font-semibold capitalize ${dark?"text-black":"text-white"}`}>
                     {item.name}
                   </h4>
                   {/* <p className="font-poppins text-msg text-sm font-normal">
@@ -120,7 +122,7 @@ const UserList = () => {
                 {friendlist.includes(item.id + auth.currentUser.uid) ||
                 friendlist.includes(auth.currentUser.uid + item.id) ? (
                   <button
-                    className="bg-[#907c98] text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                    className={`text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize ${dark?"bg-bl_opacity":"bg-wh_opacity"}`}
                   >
                     friend
                   </button>
@@ -129,7 +131,7 @@ const UserList = () => {
                   ) ? (
                   <button
                     onClick={() => handleCancel(item)}
-                    className="bg-bl_opacity text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize"
+                    className={`text-white px-[8px] pb-[3px] rounded font-normal text-md mt-[10px] capitalize ${dark?"bg-bl_opacity":"bg-wh_opacity"}`}
                   >
                     cancel
                   </button>

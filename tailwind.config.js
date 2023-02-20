@@ -11,6 +11,7 @@ module.exports = {
         primary: "#5F34F5",
         heading: "#11175D",
         red: "#ff0f0f",
+        black: "#222",
         green: "#228B22",
         msg: "rgba(77, 77, 77, 0.75)",
         bl_opacity: "rgba(0,0,0,.3)",
