@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Search from '../../components/Search'
-import Sidebar from '../../components/Sidebar'
+import Search from "../../components/Search";
+import Sidebar from "../../components/Sidebar";
 import {
   getDatabase,
   ref,
@@ -10,8 +10,8 @@ import {
   remove,
 } from "firebase/database";
 import { getAuth } from "firebase/auth";
-import Friends from "../../components/Friends"
-import Chat from "../../components/Chat"
+import Friends from "../../components/Friends";
+import Chat from "../../components/Chat";
 import { activeChat } from "../../slices/ActiveChatSlice";
 import { useDispatch } from "react-redux";
 
@@ -41,7 +41,7 @@ const Message = () => {
     onValue(friendRequestsRef, (snapshot) => {
       let arr = [];
       snapshot.forEach((item) => {
-        if (item.val().userid == auth.currentUser.uid ) {
+        if (item.val().userid == auth.currentUser.uid) {
           arr.push({ ...item.val(), id: item.key });
         }
       });
@@ -65,11 +65,11 @@ const Message = () => {
 
   return (
     <div className="flex justify-between">
-      <div className="w-[14%]">
-        <Sidebar active="message" />
+      <div className="w-[14%] hidden xl:block">
+          <Sidebar active="message" />
       </div>
-      <div className="w-[84%] flex justify-between">
-        <div className="w-[30%] h-screen flex flex-wrap">
+      <div className="w-full xl:w-[84%] flex flex-col xl:flex-row  justify-between">
+        <div className="w-full xl:w-[30%] h-screen flex flex-wrap">
           <div className="w-full">
             {/*  */}
             <Search />

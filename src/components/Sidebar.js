@@ -89,9 +89,9 @@ const Sidebar = ({ active }) => {
 
   return (
     <>
-      <div className="w-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static">
+      <div className="w-full xl:h-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static px-[10px] xl:px-[0px]">
         <div className="xl:pt-[38px] flex xl:block justify-center">
-          <div className="relative group w-[50px] h-[50px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer">
+          <div className="relative group w-[40px] h-[40px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer mr-[10px] xl:mr-[0px]">
             {user && (
               <picture>
                 <img
@@ -117,7 +117,7 @@ const Sidebar = ({ active }) => {
               {user.name}
             </h3>
           )}
-          <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[20px] px-7 xl:px-0">
+          <ul className="xl:mt-[40px] flex xl:flex-col items-center overflow-x-hidden gap-x-[25px] px-7 xl:px-0">
             <NavLink to="/">
               <li
                 className={`${
