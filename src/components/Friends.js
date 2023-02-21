@@ -18,7 +18,7 @@ const Friends = (props) => {
   const dispatch = useDispatch();
   let dark = useSelector((state) => state.darkMode.value);
 
-  let [friendRequests, setFriendRequests] = useState([]);
+  let [friends, setFriends] = useState([])
   let [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -43,9 +43,8 @@ const Friends = (props) => {
         userInfo.id = arr[0].acceptId;
         userInfo.name = arr[0].acceptname;
       }
-
       dispatch(activeChat(userInfo));
-      setFriendRequests(arr);
+      setFriends(arr);
     });
   }, []);
 
@@ -99,7 +98,7 @@ const Friends = (props) => {
 
         <div className=" overflow-y-auto max-h-[295px]">
           {/*  */}
-          {friendRequests.map((item) => (
+          {friends.map((item) => (
             <div
               onClick={() => handleSend(item)}
               className={`flex justify-between py-[10px] border-b border-solid last:border-0 ${
@@ -109,7 +108,6 @@ const Friends = (props) => {
               <div className="flex">
                 <div className="w-[55px] h-[55px] rounded-[50%] overflow-hidden">
                   <picture>
-                    {/* <img src="images/user2.png" /> */}
                     <img src="images/user2.jpg" />
                   </picture>
                 </div>
@@ -123,9 +121,6 @@ const Friends = (props) => {
                       ? item.sendername
                       : item.acceptname}
                   </h4>
-                  {/* <p onClick={()=>setShow(!show)} className={show ?" bg-black":" bg-primary"}>
-                cvxbnvn
-              </p> */}
                 </div>
               </div>
               {props.btn ? (

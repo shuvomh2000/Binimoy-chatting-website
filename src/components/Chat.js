@@ -219,13 +219,14 @@ const Chat = () => {
                 )}
           </div>
           <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
-            <input
+           <div className="w-[90%] relative">
+           <input
               placeholder="type a message..."
-              className="w-[90%] bg-[#D9D9D9] rounded-md pl-[10px] pr-[40px] py-[5px]"
+              className="w-full bg-[#D9D9D9] rounded-md pl-[10px] pr-[40px] py-[5px]"
               onChange={handleMsg}
             />
             <label for="file">
-              <ImAttachment className="absolute top-0 right-[12%] top-[50%] translate-y-[-50%] text-primary"/>
+              <ImAttachment className="absolute top-0 right-[2%] top-[50%] translate-y-[-50%] text-primary"/>
             </label>
             <input
               className="w-[90%] bg-[#D9D9D9] rounded-md px-[10px] py-[5px] hidden"
@@ -233,12 +234,16 @@ const Chat = () => {
               onChange={handleImg}
               id="file"
             />
+           </div>
+            
+            <div className="w-[8%]">
             <button
               onClick={handleSend}
-              className="bg-primary text-white w-[60px] h-[33px] rounded font-normal text-xl  capitalize flex justify-center items-center"
+              className="bg-primary text-white w-full h-[33px] rounded font-normal text-[14px] xl:text-xl  capitalize flex justify-center items-center"
             >
               <IoMdSend />
             </button>
+            </div>
           </div>
         </div>
       </div>

@@ -26,11 +26,11 @@ const Home = () => {
 
   
   return (
-    <div className={`flex justify-between p-2.5 xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-      <div className="xl:w-[14%]">
+    <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
+      <div className="w-full xl:w-[14%] ">
         <Sidebar active="home" />
       </div>
-      <div className="xl:w-[84%] flex flex-wrap gap-x-5 gap-y-10">
+      <div className="w-full xl:w-[84%] p-2.5  flex flex-wrap gap-x-5 gap-y-10">
         {/* search & friends */}
         <div className="w-full xl:w-[425px]">
           <Search />

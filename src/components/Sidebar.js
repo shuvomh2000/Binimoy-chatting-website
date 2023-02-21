@@ -79,7 +79,7 @@ const Sidebar = ({ active }) => {
   let handleLogout = () => {
     signOut(auth)
       .then(() => {
-        localStorage.removeItem("loginInfo")
+        localStorage.removeItem("loginInfo");
         navigate("/login");
       })
       .catch((error) => {
@@ -89,9 +89,9 @@ const Sidebar = ({ active }) => {
 
   return (
     <>
-      <div className="w-full xl:h-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static px-[10px] xl:px-[0px]">
+      <div className="w-full xl:h-full xl:rounded-br-[20px] xl:rounded-tr-xl bg-primary fixed bottom-0 left-0 xl:static px-[10px] xl:px-[0px] hidden xl:block">
         <div className="xl:pt-[38px] flex xl:block justify-center">
-          <div className="relative group w-[40px] h-[40px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer mr-[10px] xl:mr-[0px]">
+          <div className="relative group w-[40px] h-[40px] xl:w-[100px] xl:h-[100px] rounded-[50px] overflow-hidden bg-white xl:mx-auto my-auto cursor-pointer mr-[10px] ">
             {user && (
               <picture>
                 <img
@@ -113,7 +113,6 @@ const Sidebar = ({ active }) => {
           {/* {curentUser.displayName} */}
           {user && (
             <h3 className="w-[80%] mx-auto text-center text-xl font-bold text-white font-nunito capitalize mt-[15px] hidden lg:block">
-            
               {user.name}
             </h3>
           )}
@@ -281,6 +280,36 @@ const Sidebar = ({ active }) => {
           </div>
         </>
       )}
+      <div className="block xl:hidden w-full bg-primary py-4">
+        <ul className="flex justify-center items-center gap-x-5 text-white">
+          <li className="w-[30px] h-[30px] rounded-[50%] bg-black"></li>
+          <NavLink to="/">
+            <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "home" && "bg-white text-primary"}`}>
+              <AiOutlineHome />
+            </li>
+          </NavLink>
+          <NavLink to="/message">
+            <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "message" && "bg-white text-primary"}`}>
+              <BsChatDots />
+            </li>
+          </NavLink>
+          {/* to="/notification" */}
+          <NavLink >
+            <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "notification" && "bg-white text-primary"}`}>
+              <IoMdNotificationsOutline />
+            </li>
+          </NavLink>
+          {/* to="/setting" */}
+          <NavLink >
+            <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "setting" && "bg-white text-primary"}`}>
+              <AiOutlineSetting />
+            </li>
+          </NavLink>
+          <li onClick={handleLogout}>
+            <FiLogOut />
+          </li>
+        </ul>
+      </div>
     </>
   );
 };
