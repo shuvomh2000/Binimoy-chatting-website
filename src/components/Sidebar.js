@@ -87,16 +87,16 @@ const Sidebar = ({ active }) => {
         console.log(error);
       });
   };
-  const handleScroll =()=>{
-    // console.log(window.scrollY ==max)
-    if(window.scrollY > 0){
-      setFix(true)
-    }else{
-      setFix(false)
-    }
-  }
+  // const handleScroll =()=>{
+  //   // console.log(window.scrollY ==max)
+  //   if(window.scrollY > 0){
+  //     setFix(true)
+  //   }else{
+  //     setFix(false)
+  //   }
+  // }
 
-  window.addEventListener('scroll',handleScroll)
+  // window.addEventListener('scroll',handleScroll)
 
   return (
     <>
@@ -292,7 +292,7 @@ const Sidebar = ({ active }) => {
           </div>
         </>
       )}
-      <div className={`block xl:hidden w-full bg-primary py-4`}>
+      <div className="block xl:hidden w-full bg-primary py-4">
         <ul className="flex justify-center items-center gap-x-4 text-white text-[20px]">
           <li className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden">
           {user && (

@@ -45,12 +45,12 @@ const Home = () => {
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-       <div className={`w-full xl:hidden xl:w-[14%] block ${fix?"fixed top-0 left-0 z-[99999]":""}`}>
+      <div className={`w-full block xl:hidden xl:w-[14%]  ${fix?"fixed top-0 left-0 z-[99999]":""}`}>
         <Sidebar active="home" />
       </div>
-      {/* <div className="w-full hidden xl:w-[14%] xl:block">
+      <div className="w-full hidden xl:w-[14%] xl:block">
         <Sidebar active="home" />
-      </div> */}
+      </div>
       <div className="w-full xl:w-[84%] p-2.5  flex flex-wrap gap-x-5 gap-y-10">
         {/* search & friends */}
         <div className="w-full xl:w-[400px]">
