@@ -280,9 +280,20 @@ const Sidebar = ({ active }) => {
           </div>
         </>
       )}
-      <div className="block xl:hidden w-full bg-primary py-3">
-        <ul className="flex justify-center items-center gap-x-5 text-white text-[20px]">
-          <li className="w-[35px] h-[35px] rounded-[50%] bg-black"></li>
+      <div className="block xl:hidden w-full bg-primary py-4">
+        <ul className="flex justify-center items-center gap-x-4 text-white text-[20px]">
+          <li className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden">
+          {user && (
+              <picture>
+                <img
+                  className="object-cover"
+                  // src="images/user.jpg"
+                  src={user.photo}
+                  loading="lazy"
+                />
+              </picture>
+            )}
+          </li>
           <NavLink to="/">
             <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "home" && "bg-white text-primary"}`}>
               <AiOutlineHome />

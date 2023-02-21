@@ -168,7 +168,7 @@ const Chat = () => {
           </div>
         </div>
         {/*  */}
-        <div className="w-full h-[70vh] overflow-y-auto px-[10px] mt-[10px] mb-[45px]">
+        <div className="w-full h-[64vh] xl:h-[70vh] overflow-y-auto px-[10px] mt-[10px] mb-[45px]">
           <div className="flex flex-col gap-y-[15px]">
             {data.status == "group"
               ? groupmsg.map((item) =>

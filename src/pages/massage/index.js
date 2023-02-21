@@ -97,7 +97,7 @@ const Message = () => {
 
   return (
     <>
-    <Sidebar active="message"/>
+    
       <div className="xl:flex justify-between hidden">
         <div className="w-[14%] hidden xl:block">
           <Sidebar active="message" />
@@ -135,7 +135,7 @@ const Message = () => {
                           className="flex justify-between py-[10px] border-b border-solid last:border-0"
                         >
                           <div className="flex">
-                            <div className="w-[55px] h-[55px] rounded-[50%]">
+                            <div className="w-[50px] h-[50px] rounded-[50%]">
                               <picture>
                                 <img src="images/user1.png" />
                               </picture>
@@ -191,11 +191,11 @@ const Message = () => {
       </div>
       <div className="block xl:hidden p-[10px]">
         <Search />
-        <div className="flex gap-x-[10px] mb-[10px]">
+        <div className="flex gap-x-[10px] mb-[10px] mt-[10px]">
           {friends.map((item) => (
             <div
               onClick={() => handleSingleSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%]"
+              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
             >
               <h6>
                 {item.acceptId == auth.currentUser.uid
@@ -207,7 +207,7 @@ const Message = () => {
           {mygrp.map((item) => (
             <div
               onClick={() => handleGorupSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%]"
+              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
             >
               <h6>{item.groupName}</h6>
             </div>
@@ -215,7 +215,7 @@ const Message = () => {
           {grpmember.map((item) => (
             <div
               onClick={() => handleGorupSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%]"
+              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
             >
               <h6>{item.gName}</h6>
             </div>
@@ -223,6 +223,7 @@ const Message = () => {
         </div>
         <Chat />
       </div>
+      <Sidebar active="message"/>
     </>
   );
 };

@@ -12,7 +12,7 @@ const Search = () => {
         <input
           type="text"
           placeholder="Search..."
-          className={`shadow-md rounded-[29px] py-[15px] pl-[60px] pr-[30px]  font-nunito text-base font-normal  w-full ${
+          className={`shadow-md rounded-[29px] py-[10px] xl:py-[15px] pl-[60px] pr-[30px]  font-nunito text-base font-normal  w-full ${
             dark
               ? "bg-white text-black border xl:border-0 border-white"
               : "bg-bl_opacity text-white border-white border"

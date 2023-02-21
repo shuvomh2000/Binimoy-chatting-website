@@ -27,7 +27,7 @@ const Home = () => {
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-      <div className="w-full xl:w-[14%] ">
+      <div className="w-full hidden xl:w-[14%] xl:block">
         <Sidebar active="home" />
       </div>
       <div className="w-full xl:w-[84%] p-2.5  flex flex-wrap gap-x-5 gap-y-10">
@@ -56,6 +56,9 @@ const Home = () => {
         <div className="w-full xl:w-[334px]">
           <BlockedUser />
         </div>
+      </div>
+      <div className="w-full xl:hidden xl:w-[14%] block">
+        <Sidebar active="home" />
       </div>
     </div>
   );
