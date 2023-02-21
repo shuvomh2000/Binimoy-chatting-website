@@ -8,11 +8,11 @@ const Search = () => {
 
   return (
     <div>
-      <div className='relative  boxShadow-search mt-[5px]'>
+      <div className='relative  boxShadow-search xl:mt-[5px]'>
         <input
           type="text"
           placeholder="Search..."
-          className={` xl:shadow-md rounded-[29px] py-[15px] pl-[60px] pr-[30px]  font-nunito text-base font-normal  w-full ${
+          className={`shadow-md rounded-[29px] py-[15px] pl-[60px] pr-[30px]  font-nunito text-base font-normal  w-full ${
             dark
               ? "bg-white text-black border xl:border-0 border-white"
               : "bg-bl_opacity text-white border-white border"

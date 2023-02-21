@@ -145,7 +145,7 @@ const Chat = () => {
 
   return (
     <>
-      <div className="relative">
+      <div className="relative mb-[15px] xl:mb-[0px]">
         {/*  */}
         <div className="flex justify-between pb-[10px] border-b border-solid ">
           <div className="flex">
@@ -168,7 +168,7 @@ const Chat = () => {
           </div>
         </div>
         {/*  */}
-        <div className="w-full h-[70vh] overflow-y-auto px-[10px] my-[10px]">
+        <div className="w-full h-[70vh] overflow-y-auto px-[10px] mt-[10px] mb-[45px]">
           <div className="flex flex-col gap-y-[15px]">
             {data.status == "group"
               ? groupmsg.map((item) =>
@@ -218,7 +218,7 @@ const Chat = () => {
                   )
                 )}
           </div>
-          <div className="flex justify-between absolute bottom-[-55px] left-0 w-full">
+          <div className="flex justify-between absolute bottom-[-45px] left-0 w-full">
            <div className="w-[90%] relative">
            <input
               placeholder="type a message..."
