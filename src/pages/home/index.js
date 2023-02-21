@@ -26,6 +26,17 @@ const Home = () => {
   }, []);
 
 
+  const handleScroll =()=>{
+    // console.log(window.scrollY ==max)
+    if(window.scrollY > 0){
+      setFix(true)
+    }else{
+      setFix(false)
+    }
+  }
+
+  window.addEventListener('scroll',handleScroll)
+
   // git add .
   // git commit -m 'responsive'
   // git push
@@ -34,7 +45,7 @@ const Home = () => {
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-       <div className='w-full xl:hidden xl:w-[14%] block'>
+       <div className={`w-full xl:hidden xl:w-[14%] block ${fix?"fixed top-0 left-0 z-[99999]":""}`}>
         <Sidebar active="home" />
       </div>
       {/* <div className="w-full hidden xl:w-[14%] xl:block">
