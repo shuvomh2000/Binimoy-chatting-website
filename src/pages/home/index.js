@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import BlockedUser from "../../components/BlockedUser";
@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 const Home = () => {
   const navigate = useNavigate();
 
+  let [fix,setFix] =useState(false)
   let user = useSelector((state) => state.loginUser.value);
   let dark = useSelector((state) => state.darkMode.value);
 
@@ -24,6 +25,26 @@ const Home = () => {
     }
   }, []);
 
+  // function setFixMenubar(){
+  //   if(window.scrollY > 100){
+  //     setFix(true)
+  //   }else{
+  //     setFix(false)
+  //   }
+  // }
+  // window.addEventListener("scroll",setFixMenubar)
+
+  useEffect(()=>{
+    const handleScroll =()=>{
+      setFix(window.scrollY >50)
+      console.log(window.scrollY )
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return ()=> window.removeEventListener("scroll",handleScroll)
+  },[])
+
+
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
@@ -32,7 +53,7 @@ const Home = () => {
       </div>
       <div className="w-full xl:w-[84%] p-2.5  flex flex-wrap gap-x-5 gap-y-10">
         {/* search & friends */}
-        <div className="w-full xl:w-[425px]">
+        <div className="w-full xl:w-[400px]">
           <Search />
           <Friends />
         </div>
@@ -45,7 +66,7 @@ const Home = () => {
           <FriendRequest />
         </div>
         {/* my group list */}
-        <div className="w-full xl:w-[425px]">
+        <div className="w-full xl:w-[400px]">
           <Groups />
         </div>
         {/* group list */}
@@ -57,7 +78,8 @@ const Home = () => {
           <BlockedUser />
         </div>
       </div>
-      <div className="w-full xl:hidden xl:w-[14%] block">
+      {/* ${fix ?"fixed top-0 left-0":""} */}
+      <div className={`w-full xl:hidden xl:w-[14%] block `}>
         <Sidebar active="home" />
       </div>
     </div>

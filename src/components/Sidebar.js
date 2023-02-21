@@ -26,6 +26,7 @@ const Sidebar = ({ active }) => {
 
   let [loading, setLoading] = useState(false);
   let [show, setShow] = useState(false);
+  let [fix,setFix] =useState(false)
 
   const [image, setImage] = useState();
   const [imgName, setImgName] = useState("");
@@ -86,6 +87,27 @@ const Sidebar = ({ active }) => {
         console.log(error);
       });
   };
+
+
+  // useEffect(()=>{
+  //   const handleScroll =()=>{
+  //     setFix(window.scrollY >50)
+  //     console.log(window.scrollY )
+  //   }
+
+  //   window.addEventListener("scroll", handleScroll)
+  //   return ()=> window.removeEventListener("scroll",handleScroll)
+  // },[])
+
+
+  // function setFixMenubar(){
+  //   if(window.scrollY >= 50){
+  //     setFix(true)
+  //   }else{
+  //     setFix(false)
+  //   }
+  // }
+  // window.addEventListener("scroll",setFixMenubar)
 
   return (
     <>
@@ -149,7 +171,8 @@ const Sidebar = ({ active }) => {
                 />
               </li>
             </NavLink>
-            <NavLink to="/notification">
+            <NavLink>
+            {/* to="/notification" */}
               <li
                 className={`${
                   active == "notification" &&
@@ -280,7 +303,7 @@ const Sidebar = ({ active }) => {
           </div>
         </>
       )}
-      <div className="block xl:hidden w-full bg-primary py-4">
+      <div className={`block xl:hidden w-full bg-primary py-4 ${fix ?"fixed top-0 left-0":""}`}>
         <ul className="flex justify-center items-center gap-x-4 text-white text-[20px]">
           <li className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden">
           {user && (
