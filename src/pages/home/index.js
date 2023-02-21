@@ -25,35 +25,6 @@ const Home = () => {
     }
   }, []);
 
-  // function setFixMenubar(){
-  //   if(window.scrollY > 100){
-  //     setFix(true)
-  //   }else{
-  //     setFix(false)
-  //   }
-  // }
-  // window.addEventListener("scroll",setFixMenubar)
-
-  // useEffect(()=>{
-  //   const handleScroll =()=>{
-  //     setFix(window.scrollY >50)
-  //     console.log(window.scrollY )
-  //   }
-
-  //   window.addEventListener("scroll", handleScroll)
-  //   return ()=> window.removeEventListener("scroll",handleScroll)
-  // },[])
-
-  const handleScroll =()=>{
-    // console.log(window.scrollY ==max)
-    if(window.scrollY > 0){
-      setFix(true)
-    }else{
-      setFix(false)
-    }
-  }
-
-  window.addEventListener('scroll',handleScroll)
 
   // git add .
   // git commit -m 'responsive'
@@ -63,7 +34,7 @@ const Home = () => {
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-       <div className={`w-full xl:hidden xl:w-[14%] block ${fix?"fixed top-0 left-0":""}`}>
+       <div className='w-full xl:hidden xl:w-[14%] block'>
         <Sidebar active="home" />
       </div>
       {/* <div className="w-full hidden xl:w-[14%] xl:block">

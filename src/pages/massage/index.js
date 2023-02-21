@@ -21,6 +21,7 @@ const Message = () => {
   const dispatch = useDispatch();
 
   let [mygrp, setMygrp] = useState([]);
+  let [fix, setFix] = useState(false);
   let [grpmember, setGrpMember] = useState([]);
   let [friends, setFriends] = useState([]);
 
@@ -95,9 +96,19 @@ const Message = () => {
     dispatch(activeChat(userInfo));
   };
 
+  const handleScroll = () => {
+    // console.log(window.scrollY ==max)
+    if (window.scrollY > 0) {
+      setFix(true);
+    } else {
+      setFix(false);
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
   return (
     <>
-    
       <div className="xl:flex justify-between hidden">
         <div className="w-[14%] hidden xl:block">
           <Sidebar active="message" />
@@ -190,6 +201,7 @@ const Message = () => {
         </div>
       </div>
       <div className="block xl:hidden p-[10px]">
+        <Sidebar active="message" />
         <Search />
         <div className="flex gap-x-[10px] mb-[10px] mt-[10px]">
           {friends.map((item) => (
@@ -223,7 +235,6 @@ const Message = () => {
         </div>
         <Chat />
       </div>
-      <Sidebar active="message"/>
     </>
   );
 };
