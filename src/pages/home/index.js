@@ -34,23 +34,41 @@ const Home = () => {
   // }
   // window.addEventListener("scroll",setFixMenubar)
 
-  useEffect(()=>{
-    const handleScroll =()=>{
-      setFix(window.scrollY >50)
-      console.log(window.scrollY )
-    }
+  // useEffect(()=>{
+  //   const handleScroll =()=>{
+  //     setFix(window.scrollY >50)
+  //     console.log(window.scrollY )
+  //   }
 
-    window.addEventListener("scroll", handleScroll)
-    return ()=> window.removeEventListener("scroll",handleScroll)
-  },[])
+  //   window.addEventListener("scroll", handleScroll)
+  //   return ()=> window.removeEventListener("scroll",handleScroll)
+  // },[])
+
+  const handleScroll =()=>{
+    // console.log(window.scrollY ==max)
+    if(window.scrollY > 0){
+      setFix(true)
+    }else{
+      setFix(false)
+    }
+  }
+
+  window.addEventListener('scroll',handleScroll)
+
+  // git add .
+  // git commit -m 'responsive'
+  // git push
 
 
   
   return (
     <div className={`xl:flex justify-between  xl:p-0 ${dark?"bg-white":"bg-black"}`}>
-      <div className="w-full hidden xl:w-[14%] xl:block">
+       <div className={`w-full xl:hidden xl:w-[14%] block ${fix?"fixed top-0 left-0":""}`}>
         <Sidebar active="home" />
       </div>
+      {/* <div className="w-full hidden xl:w-[14%] xl:block">
+        <Sidebar active="home" />
+      </div> */}
       <div className="w-full xl:w-[84%] p-2.5  flex flex-wrap gap-x-5 gap-y-10">
         {/* search & friends */}
         <div className="w-full xl:w-[400px]">
@@ -79,9 +97,7 @@ const Home = () => {
         </div>
       </div>
       {/* ${fix ?"fixed top-0 left-0":""} */}
-      <div className={`w-full xl:hidden xl:w-[14%] block `}>
-        <Sidebar active="home" />
-      </div>
+     
     </div>
   );
 };
