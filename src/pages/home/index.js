@@ -38,7 +38,7 @@ const Home = () => {
   window.addEventListener('scroll',handleScroll)
 
   // git add .
-  // git commit -m 'responsive'
+  // git commit -m 'setting page'
   // git push
 
 

@@ -25,6 +25,8 @@ const Chat = () => {
   const auth = getAuth();
 
   let data = useSelector((state) => state.activeChat.value);
+  let dark = useSelector((state) => state.darkMode.value);
+
 
   let [msg, setMsg] = useState("");
   let [img, setImg] = useState("");
@@ -156,7 +158,7 @@ const Chat = () => {
             </div>
             <div className="ml-[10px] flex items-center">
               <div>
-                <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                <h4 className={`font-poppins text-sm font-semibold capitalize ${dark?"text-black":"text-white"}`}>
                   {/* {item.sender_name} */}
                   {data.name}
                 </h4>
@@ -222,7 +224,7 @@ const Chat = () => {
            <div className="w-[90%] relative">
            <input
               placeholder="type a message..."
-              className="w-full bg-[#D9D9D9] rounded-md pl-[10px] pr-[40px] py-[5px]"
+              className={`w-full rounded-md pl-[10px] pr-[40px] py-[5px] ${dark?"bg-[#D9D9D9]":"bg-bl_opacity"}`}
               onChange={handleMsg}
             />
             <label for="file">

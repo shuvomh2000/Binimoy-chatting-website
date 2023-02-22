@@ -322,8 +322,8 @@ const Sidebar = ({ active }) => {
               <IoMdNotificationsOutline />
             </li>
           </NavLink>
-          {/* to="/setting" */}
-          <NavLink >
+          
+          <NavLink to="/setting">
             <li className={`p-[7px] rounded-[50%] flex justify-center items-center ${active == "setting" && "bg-white text-primary"}`}>
               <AiOutlineSetting />
             </li>

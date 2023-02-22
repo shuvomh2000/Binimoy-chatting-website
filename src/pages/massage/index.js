@@ -13,7 +13,7 @@ import { getAuth } from "firebase/auth";
 import Friends from "../../components/Friends";
 import Chat from "../../components/Chat";
 import { activeChat } from "../../slices/ActiveChatSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Message = () => {
   const db = getDatabase();
@@ -24,6 +24,7 @@ const Message = () => {
   let [fix, setFix] = useState(false);
   let [grpmember, setGrpMember] = useState([]);
   let [friends, setFriends] = useState([]);
+  let dark = useSelector((state) => state.darkMode.value);
 
   useEffect(() => {
     const friendRequestsRef = ref(db, "groups/");
@@ -109,12 +110,16 @@ const Message = () => {
 
   return (
     <>
-      <div className="xl:flex justify-between hidden">
+      <div
+        className={`xl:flex justify-between hidden ${
+          dark ? "bg-white" : "bg-black"
+        }`}
+      >
         <div className="w-[14%] hidden xl:block">
           <Sidebar active="message" />
         </div>
         <div className="w-full xl:w-[84%] flex flex-col xl:flex-row  justify-between">
-          <div className="w-full xl:w-[30%] h-screen flex flex-wrap">
+          <div className="w-full xl:w-[30%] h-screen flex flex-wrap ">
             <div className="w-full">
               {/*  */}
               <Search />
@@ -126,10 +131,18 @@ const Message = () => {
             </div> */}
             </div>
             <div className="w-full">
-              <div className="shadow-md p-[20px] rounded-[20px]">
+              <div
+                className={`shadow-md p-[20px] rounded-[20px] ${
+                  !dark && "shadow-wh_opacity"
+                }`}
+              >
                 <div className="max-h-[295px] overflow-y-auto">
                   <div className="flex justify-between ">
-                    <h3 className="font-poppins text-black text-xl font-semibold capitalize">
+                    <h3
+                      className={`font-poppins text-xl font-semibold capitalize ${
+                        dark ? "text-black" : "text-white"
+                      }`}
+                    >
                       groups
                       {/* <span className="font-normal text-[16px]">
                       ({grp.length})
@@ -152,7 +165,11 @@ const Message = () => {
                               </picture>
                             </div>
                             <div className="ml-[10px] flex items-center">
-                              <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                              <h4
+                                className={`font-poppins text-black text-sm font-semibold capitalize ${
+                                  dark ? "text-black" : "text-white"
+                                }`}
+                              >
                                 {item.groupName}
                               </h4>
                             </div>
@@ -177,7 +194,11 @@ const Message = () => {
                               </picture>
                             </div>
                             <div className="ml-[10px] flex items-center">
-                              <h4 className="font-poppins text-black text-sm font-semibold capitalize">
+                              <h4
+                                className={`font-poppins text-black text-sm font-semibold capitalize ${
+                                  dark ? "text-black" : "text-white"
+                                }`}
+                              >
                                 {item.gName}
                               </h4>
                             </div>
@@ -191,7 +212,7 @@ const Message = () => {
               </div>
             </div>
           </div>
-          <div className="w-[67%] shadow-xl border border-solid h-screen p-[30px]">
+          <div className="w-[67%] shadow-xl h-screen p-[30px]">
             <div>
               <div>
                 <Chat />
@@ -200,14 +221,16 @@ const Message = () => {
           </div>
         </div>
       </div>
-      <div className="block xl:hidden p-[10px]">
+      <div className={`block xl:hidden p-[10px] ${dark?"bg-white":"bg-black"}`}>
+        <div className="mb-[10px]">
         <Sidebar active="message" />
+        </div>
         <Search />
         <div className="flex gap-x-[10px] mb-[10px] mt-[10px]">
           {friends.map((item) => (
             <div
               onClick={() => handleSingleSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
+              className={`w-[35px] h-[35px] rounded-[50%] overflow-hidden ${dark?"bg-black":"bg-white"}`}
             >
               <h6>
                 {item.acceptId == auth.currentUser.uid
@@ -219,7 +242,7 @@ const Message = () => {
           {mygrp.map((item) => (
             <div
               onClick={() => handleGorupSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
+              className={`w-[35px] h-[35px] rounded-[50%] overflow-hidden ${dark?"bg-black":"bg-white"}`}
             >
               <h6>{item.groupName}</h6>
             </div>
@@ -227,7 +250,7 @@ const Message = () => {
           {grpmember.map((item) => (
             <div
               onClick={() => handleGorupSelect(item)}
-              className="w-[35px] h-[35px] rounded-[50%] bg-black overflow-hidden"
+              className={`w-[35px] h-[35px] rounded-[50%] overflow-hidden ${dark?"bg-black":"bg-white"}`}
             >
               <h6>{item.gName}</h6>
             </div>
